@@ -18,7 +18,7 @@ The data is in a somewhat cleaned and structured format by AirBnB, but not neces
 | neighbourhood      | text  | Name of the neighbourhood the listing is in  |
 | latitude           | float | coordinate location    |
 | longitude          | float | coordinate location    |
-| room_type          | text  | one of [Entire home/apt|Private room|Shared room|Hotel] |
+| room_type          | text  | one of [Entire home/apt\|Private room\|Shared room\|Hotel] |
 | price              | int |  price in NZD  |
 | minimum_nights     | int |  minimum length stay for listing   |
 | number_of_reviews  | int  |   self explanatory               |
