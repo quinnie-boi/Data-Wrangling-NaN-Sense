@@ -1,14 +1,5 @@
 # DATA201/422 Data-Wrangling
 
-## We're all in!
- 
-# Monday, 27 July 2026
-# 4:00 PM – 4:15 PM
-# With tutor Kate
-
-
-# Hai, I am a new member
-
 # Deliverable 2
 The listings.csv dataset is stored locally under `deliverable_2/data/listings.csv`. The contents of folders named `data` is excluded from being uploaded to git, with an entry in our `.gitignore`.
 
