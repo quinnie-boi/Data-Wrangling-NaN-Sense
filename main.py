@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 
 def read_data(data_path="data"):
     """
@@ -26,25 +27,32 @@ def read_data(data_path="data"):
 
 # remove missing price values??
 
-def plot_hist(values):
+def plot_hist(values, title):
     """plot the prices in a histogram"""
     price = values['price']
+    plt.figure(figsize=(8, 6))
     axes = plt.axes()
-    axes.hist(price, bins=np.linspace(0,1500,15), edgecolor='steelblue', color='skyblue')
-    axes.grid(True)
-    axes.set_title("Price density of AirBnBs in Christchurch")
+    axes.hist(price, bins=np.linspace(0,1500,16), edgecolor='steelblue', color='skyblue')
+    axes.set_title(title)
     axes.set_xlabel('Nightly price ($)')
     axes.set_ylabel('Count')
-    plt.show()
+
+
 
 def main():
     data = read_data()
     print(data[["number_of_reviews", "price"]].head())
     print(data[["number_of_reviews", "price"]].describe())
     print(data["price"].isna().sum())
-    # filter data by chch location only <-- alex temp filtering for plots
+    # filter data by chch location only
     chch_data = data[data['neighbourhood_group'] == 'Christchurch City']
-    plot_hist(chch_data)  # using max price of $1500
+    # plot nz
+    nz_title = "Price density of AirBnBs in New Zealand"
+    plot_hist(data, nz_title)
+    # plot chch price titles
+    chch_title = "Price density of AirBnBs in Christchurch"
+    plot_hist(chch_data, chch_title)  # using max price of $1500
+    plt.show()
 
 if __name__ == "__main__":
     main()
