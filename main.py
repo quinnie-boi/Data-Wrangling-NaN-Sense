@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+from datetime import date
 
 def read_data(data_path="data"):
     """
@@ -38,6 +39,25 @@ def plot_hist(values, title):
     axes.set_xlabel('Nightly price ($)')
     axes.set_ylabel('Count')
 
+# days since last review --> chch_data daytime format is in
+def str_to_date(data):
+    """convert string format of date in last-review column (YYYY-MM-DD) to date"""
+    data['last_review'] = pd.to_datetime(data['last_review'], format="%Y-%m-%d",
+                                         errors='coerce')
+
+def days_since_review(data):
+    """how many days since the last review??"""
+    data['days_since_last_review'] = (pd.Timestamp.today() - data['last_review']
+                                      ).dt.days
+
+# plot in histogram <-- edit bins
+def plot_day_hist(day_values):
+    """plot days since last view into a histogram"""
+    days = day_values['days_since_last_review']
+    plt.figure(figsize=(8, 6))
+    axes = plt.axes()
+    axes.hist(days, edgecolor='orchid', color='thistle')
+    axes.set_title('Days since last review (CHCH)')
 
 def main():
     data = read_data()
@@ -52,6 +72,15 @@ def main():
     # plot chch price titles
     chch_title = "Price density of AirBnBs in Christchurch"
     plot_hist(chch_data, chch_title)  # using max price of $1500
+    # days since last review
+    str_to_date(chch_data)
+    # check str to date conversion worked
+    print(chch_data['last_review'].dtype)
+    # calculate days since last review
+    days_since_review(chch_data)
+
+    plot_day_hist(chch_data)
+
     plt.show()
 
 if __name__ == "__main__":
