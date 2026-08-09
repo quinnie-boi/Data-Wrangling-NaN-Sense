@@ -2,6 +2,9 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
+# month year column code to be added here
+
+
 def read_data(data_path="data"):
     """
     reads the 9 listings.csv files from the /data folder then
@@ -76,7 +79,7 @@ def main():
     print(data[["number_of_reviews", "price"]].head())
     print(data[["number_of_reviews", "price"]].describe())
     print(data["price"].isna().sum())
-    # filter data by chch location only
+    # filter data by chch location only (temporary)
     chch_data = data[data['neighbourhood_group'] == 'Christchurch City']
 
     # plot nz nightly price data
@@ -105,7 +108,8 @@ def main():
     print(f"The top 10% of properties reviewed in Christchurch are reviewed more than {chch_90:.0f} times")
     print(f"The top 10% of properties reviewed nationwide are reviewed more than {nz_90:.0f} times")
     # check how many properties in chch are reviewed 182 times to get difference
-
+    # alex/syamily to generate final visualisation
+    # alex check plots and edit axis labels
     plt.show() # generate plots
 
 
