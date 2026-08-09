@@ -32,11 +32,11 @@ def plot_hist(values, title):
     price = values['price']
     plt.figure(figsize=(8, 6))
     axes = plt.axes()
+    # for KNIME pipeline, do not need to filter missing price values out as the bins do that for us (by not displaying them)
     axes.hist(price, bins=np.linspace(0,1500,16), edgecolor='steelblue', color='skyblue')
     axes.set_title(title)
     axes.set_xlabel('Nightly price ($)')
     axes.set_ylabel('Count')
-
 
 
 def main():
