@@ -71,7 +71,7 @@ def plot_rev_hist(rev_values):
     reviews = rev_values['number_of_reviews']
     plt.figure(figsize=(8, 6))
     axes = plt.axes()
-    axes.hist(reviews, edgecolor='orchid', color='thistle', bins=np.linspace(183,1083,21))
+    axes.hist(reviews, edgecolor='seagreen', color='mediumaquamarine', bins=np.linspace(183,1083,21))
     axes.set_title('Number of reviews in the top 10% of reviews (CHCH)')
     axes.set_xlabel('Number of Reviews')
     axes.set_ylabel('Count/Number of properties')
