@@ -101,8 +101,6 @@ def main():
     # plot hist of number of reviews for chch
     plot_rev_hist(chch_data)
 
-
-    print(chch_data[["number_of_reviews", "price"]].describe())
     chch_90 = np.quantile(chch_data['number_of_reviews'], .9)
     nz_90 = np.quantile(data['number_of_reviews'], .9)
     print(f"The top 10% of properties reviewed in Christchurch are reviewed more than {chch_90:.0f} times")
