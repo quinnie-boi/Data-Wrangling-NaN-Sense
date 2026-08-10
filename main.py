@@ -82,7 +82,7 @@ def str_to_date(data):
 def days_since_review(data):
     """how many days since the last review??"""
     data["days_since_last_review"] = (
-        pd.to_datetime("2026-06-19",format="%Y-%m-%d") - data["last_review"]
+        pd.to_datetime("2026-06-22",format="%Y-%m-%d") - data["last_review"]
     ).dt.days
 
 
