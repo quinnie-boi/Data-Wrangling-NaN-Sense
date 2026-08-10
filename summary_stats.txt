@@ -1,0 +1,119 @@
+
+=== Column:  ===
+Missing Values: 0
+Min:  0.0
+Max:  50931.0
+Mean: 24459.33
+Std:  14136.41
+
+=== Column: id ===
+Missing Values: 0
+Min:  36194.0
+Max:  1.7107735456254103e+18
+Mean: 778987119735173632.00
+Std:  612162656594361472.00
+
+=== Column: name ===
+Missing Values: 0
+
+=== Column: host_id ===
+Missing Values: 1
+Min:  29300.0
+Max:  1.7107150924532782e+18
+Mean: 1150245430080893.00
+Std:  43966541696387920.00
+
+=== Column: host_name ===
+Missing Values: 78
+
+=== Column: neighbourhood_group ===
+Missing Values: 0
+
+=== Column: neighbourhood ===
+Missing Values: 0
+
+=== Column: latitude ===
+Missing Values: 0
+Min:  -47.012426203282885
+Max:  -34.51571
+Mean: -40.15
+Std:  3.34
+
+=== Column: longitude ===
+Missing Values: 0
+Min:  -176.5613
+Max:  178.4886585
+Mean: 173.52
+Std:  5.48
+
+=== Column: room_type ===
+Missing Values: 0
+
+=== Column: price ===
+Missing Values: 167443
+Min:  5.0
+Max:  182817.0
+Mean: 380.28
+Std:  1318.02
+
+=== Column: minimum_nights ===
+Missing Values: 328
+Min:  1.0
+Max:  1000.0
+Mean: 2.11
+Std:  8.74
+
+=== Column: number_of_reviews ===
+Missing Values: 0
+Min:  0.0
+Max:  1763.0
+Mean: 66.08
+Std:  113.91
+
+=== Column: last_review ===
+Missing Values: 43617
+
+=== Column: reviews_per_month ===
+Missing Values: 43617
+Min:  0.01
+Max:  25.17
+Mean: 1.81
+Std:  1.92
+
+=== Column: calculated_host_listings_count ===
+Missing Values: 1
+Min:  1.0
+Max:  1586.0
+Mean: 52.92
+Std:  237.95
+
+=== Column: availability_365 ===
+Missing Values: 0
+Min:  0.0
+Max:  365.0
+Mean: 209.18
+Std:  119.43
+
+=== Column: number_of_reviews_ltm ===
+Missing Values: 0
+Min:  0.0
+Max:  332.0
+Mean: 14.89
+Std:  20.71
+
+=== Column: license ===
+Missing Values: 440050
+
+=== Column: month ===
+Missing Values: 0
+Min:  1.0
+Max:  12.0
+Mean: 6.02
+Std:  3.81
+
+=== Column: year ===
+Missing Values: 0
+Min:  25.0
+Max:  26.0
+Mean: 25.67
+Std:  0.47
