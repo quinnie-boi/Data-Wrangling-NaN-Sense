@@ -103,22 +103,27 @@ def plot_day_hist(day_values):
 
 # plot in histogram
 def plot_rev_hist(rev_values):
-    """plot days since last review into a histogram"""
+    """number of reviews per property in CHCH"""
     reviews = rev_values["number_of_reviews"]
     plt.figure(figsize=(8, 6))
     axes = plt.axes()
 
+    bins = np.concatenate([
+        np.linspace(0, 600, 30),
+        [np.inf],
+    ])
     counts, bins, patches = axes.hist(
         reviews,
         edgecolor="seagreen",
         color="mediumaquamarine",
-        bins=np.linspace(100, 1000, 21),
+        bins=bins,
     )
     # recolor bins for reviews in top 10%
     for patch, left_edge in zip(patches, bins[:-1]):
         if left_edge >= 183:
             patch.set_facecolor("powderblue")
-
+    # recolor top end
+    patches[-1].set_facecolor('coral')
     # legend time
     legend_elements = [
         Patch(
@@ -129,8 +134,13 @@ def plot_rev_hist(rev_values):
         Patch(
             facecolor="powderblue",
             edgecolor="seagreen",
-            label="Top 10% of reviews (>=183)",
+            label="Top 10% of reviews (>=183 and <600)",
         ),
+        Patch(
+            facecolor="coral",
+            edgecolor="seagreen",
+            label='>600 reviews'
+        )
     ]
 
     axes.set_title("Number of reviews per property in CHCH")
