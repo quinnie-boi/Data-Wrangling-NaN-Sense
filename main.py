@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-
+from matplotlib.patches import Patch
 # month year column code to be added here
 
 
@@ -74,11 +74,36 @@ def plot_rev_hist(rev_values):
     reviews = rev_values['number_of_reviews']
     plt.figure(figsize=(8, 6))
     axes = plt.axes()
-    axes.hist(reviews, edgecolor='seagreen', color='mediumaquamarine', bins=np.linspace(183,1083,21))
-    axes.set_title('Number of reviews in the top 10% of reviews (CHCH)')
+
+    counts, bins, patches = axes.hist(
+        reviews,
+        edgecolor='seagreen',
+        color='mediumaquamarine',
+        bins=np.linspace(100,1000,21)
+    )
+    # recolor bins for reviews in top 10%
+    for patch, left_edge in zip(patches, bins[:-1]):
+        if left_edge >= 183:
+            patch.set_facecolor('powderblue')
+
+    # legend time
+    legend_elements = [
+        Patch(
+            facecolor='mediumaquamarine',
+            edgecolor='seagreen',
+            label='Bottom 90% of reviews (<183)'
+        ),
+        Patch(
+            facecolor='powderblue',
+            edgecolor='seagreen',
+            label='Top 10% of reviews (>=183)'
+        )
+    ]
+
+    axes.set_title('Number of reviews per property in CHCH')
     axes.set_xlabel('Number of Reviews')
     axes.set_ylabel('Count/Number of properties')
-
+    axes.legend(handles=legend_elements, title='Review count')
 
 def main():
     data = read_data()
