@@ -1,6 +1,3 @@
-import re
-
-import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -85,7 +82,7 @@ def str_to_date(data):
 def days_since_review(data):
     """how many days since the last review??"""
     data["days_since_last_review"] = (
-        pd.Timestamp.today() - data["last_review"]
+        pd.to_datetime("2026-06-19",format="%Y-%m-%d") - data["last_review"]
     ).dt.days
 
 
@@ -96,7 +93,7 @@ def plot_day_hist(day_values):
     plt.figure(figsize=(8, 6))
     axes = plt.axes()
     axes.hist(days, edgecolor="orchid", color="thistle", bins=np.linspace(0, 3000, 31))
-    axes.set_title("Days since last review (CHCH)")
+    axes.set_title("Days since last review (CHCH, 19 June 2026)")
     axes.set_xlabel("Days")
     axes.set_ylabel("Count")
 
@@ -154,11 +151,10 @@ def main():
     data.to_csv("data/concatenated data 25-10 to 26-06.csv")
     print(data[["number_of_reviews", "price"]].head())
     print(data[["number_of_reviews", "price"]].describe())
-    print(data["price"].isna().sum())
 
     # filter data by chch location only (temporary)
     chch_data = data[data["neighbourhood_group"] == "Christchurch City"]
-
+    print(chch_data["price"].isna().sum())
     # days since last review
     str_to_date(chch_data)
 
