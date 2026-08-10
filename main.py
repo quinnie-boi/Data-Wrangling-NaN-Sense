@@ -65,12 +65,12 @@ def plot_day_hist(day_values):
 
 # plot in histogram
 def plot_rev_hist(rev_values):
-    """plot days since last view into a histogram"""
+    """plot days since last review into a histogram"""
     reviews = rev_values['number_of_reviews']
     plt.figure(figsize=(8, 6))
     axes = plt.axes()
-    axes.hist(reviews, edgecolor='orchid', color='thistle', bins=np.linspace(0,1000,21))
-    axes.set_title('Number of reviews (CHCH)')
+    axes.hist(reviews, edgecolor='orchid', color='thistle', bins=np.linspace(183,1083,21))
+    axes.set_title('Number of reviews in the top 10% of reviews (CHCH)')
 
 
 
