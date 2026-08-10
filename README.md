@@ -1,4 +1,6 @@
 # DATA201/422 Data-Wrangling
+# Deliverable 3
+The naming convention needed for our code to work is "listings-yy-mm.cvs" e.g. listings-26-01 for January 2026
 
 # Deliverable 2
 The listings.csv dataset is stored locally under `deliverable_2/data/listings.csv`. The contents of folders named `data` is excluded from being uploaded to git, with an entry in our `.gitignore`.
