@@ -1,0 +1,127 @@
+import csv
+import glob
+import itertools
+import math
+from collections import Counter
+
+
+#Finds all 9 CSV files in the current directory
+#Adjusts the path string if your files are in a different folder
+csv_files = glob.glob("data/*.csv")
+
+#Opens the combined dataset .csv file
+with open("combined_dataset.csv", "w", encoding="utf-8") as outfile:
+    #Tracks the header row so it is only written once
+    has_header = False
+
+    for file_path in csv_files:
+        #Excludes the output file if it happens to match the glob pattern
+        if file_path == "combined_dataset.csv":
+            continue
+
+        with open(file_path, "r", encoding="utf-8") as infile:
+            #Reads the header row of the current file
+            header = infile.readline()
+
+            #If this is the very first file, writes the header row
+            if not has_header:
+                outfile.write(header)
+                has_header = True
+
+            #Writes all remaining data rows
+            for line in infile:
+                outfile.write(line)
+
+print(f"Successfully merged {len(csv_files)} files into combined_dataset.csv")
+
+#Prints headers of combined dataset
+with open("combined_dataset.csv", "r", encoding="utf-8") as file:
+    header = file.readline().strip()
+    print("Column Headers:")
+    print(header)
+
+#Filters for Christchurch City
+with open('combined_dataset.csv', mode='r', newline='', encoding='utf-8') as f:
+    reader = csv.reader(f)
+    header = next(reader)  #Saves the column headers
+
+    #Finds the index of the 'neighbourhood_group' column
+    group_index = header.index('neighbourhood_group')
+
+    #Filters rows matching "Christchurch City"
+    filtered_rows = [row for row in reader if row[group_index] == 'Christchurch City']
+
+#Creates new dataset using filtered data
+with open('christchurch_filtered.csv', mode='w', newline='', encoding='utf-8') as f:
+    writer = csv.writer(f)
+    writer.writerow(header)       #Writes the header first
+    writer.writerows(filtered_rows) #Writes the filtered rows
+
+#Prints the first few rows of filtered dataset
+print("Filtered Data from Original CSV File:")
+print(header)
+for row in filtered_rows[:5]:  #Shows first 5 matches
+    print(row)
+
+#Prints first few rows of new csv file (should match those above)
+print("Christchurch Data CSV File:")
+with open('christchurch_filtered.csv', mode='r', newline='', encoding='utf-8') as f:
+    reader = csv.reader(f)
+    for row in itertools.islice(reader, 6):
+        print(row)
+
+#Opens the filtered dataset
+with open('christchurch_filtered.csv', mode='r', newline='', encoding='utf-8') as f:
+    reader = csv.reader(f)
+    header = next(reader)  #Extracts column headers
+    rows = list(reader)    #Loads all rows into memory
+
+#Processes summary statistics for each column
+for index, col_name in enumerate(header):
+    print(f"\n=== Column: {col_name} ===")
+
+    #Extracts raw string values for the current column
+    raw_values = [row[index] for row in rows]
+
+    #Calculates missing/empty values
+    missing_count = sum(1 for val in raw_values if val.strip() == '')
+    print(f"Missing Values: {missing_count}")
+
+    #Extracts non-empty entries to evaluate data type
+    valid_values = [val.strip() for val in raw_values if val.strip() != '']
+
+    #Attempts to isolate valid numbers
+    numeric_values = []
+    for val in valid_values:
+        try:
+            numeric_values.append(float(val))
+        except ValueError:
+            pass #Non-numeric text caught here
+
+    #Checks if this column behaves as a numeric column
+    is_numeric = len(numeric_values) == len(valid_values) and len(numeric_values) > 0
+
+    if is_numeric:
+        n = len(numeric_values)
+        mean_val = sum(numeric_values) / n
+        min_val = min(numeric_values)
+        max_val = max(numeric_values)
+
+        #Calculates standard deviation
+        if n > 1:
+            variance = sum((x - mean_val) ** 2 for x in numeric_values) / (n - 1)
+            std_val = math.sqrt(variance)
+        else:
+            std_val = 0.0
+
+        print(f"Min:  {min_val}")
+        print(f"Max:  {max_val}")
+        print(f"Mean: {mean_val:.2f}")
+        print(f"Std:  {std_val:.2f}")
+    else:
+        #Treats as a categorical column and print counts
+        counts = Counter(raw_values)
+        print("Category Counts:")
+        for category, count in counts.items():
+            display_name = "[Missing]" if category.strip() == "" else category
+            print(f"  - {display_name}: {count}")
