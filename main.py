@@ -26,6 +26,9 @@ def read_data(data_path="data"):
     # combines the list of datasets into one pandas data frame
     return pd.concat(data_files)
 
+# summary stats function(s) to go here if needed
+
+
 # price histogram
 
 # remove missing price values??
@@ -84,6 +87,8 @@ def main():
     print(data["price"].isna().sum())
     # filter data by chch location only (temporary)
     chch_data = data[data['neighbourhood_group'] == 'Christchurch City']
+
+    # summary stats to go here
 
     # plot nz nightly price data
     nz_title = "Price density of AirBnBs in New Zealand"
