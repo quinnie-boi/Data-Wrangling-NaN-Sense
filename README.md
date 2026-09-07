@@ -1,4 +1,29 @@
 # DATA201/422 Data-Wrangling
+# Deliverable 4
+Document your decisions, the reasons behind your decisions, and the consequences (e.g., number of rows lost due to missing value handling)
+What columns are we dropping?
+Why did we choose that?
+
+
+"Detailed quarterly report, 2020-2026" of rental bond data
+Downloaded from https://www.tenancy.govt.nz/about-tenancy-services/data-and-statistics/rental-bond-data/
+
+| Variable                | Type  | Description                                                                       |
+|-------------------------|-------|-----------------------------------------------------------------------------------|
+| TimeFrame               | date  | Date ended for quarter in which bond was lodged                                   |
+| Location Id             | float |                                                                                   |
+| DwellingType            | text  | Type of accomodation (room, flat, etc)                                            |
+| Number Of Beds          | float | (mixed??) Number of bedrooms in dwelling of bond registered                       |
+| Total Bonds             | float |                                                                                   |
+| Active Bonds            | float |                                                                                   |
+| Closed Bonds            | float | Number of bonds closed/returned in the quarter                                    |
+| Median Rent             | float | Median rent for dwellings in the quarter                                          |
+| Geometric Mean          | float |                                                                                   |
+| Upper Quartile Rent     | float | Rents above this figure are in the top 25% of rents for this area in the quarter  |
+| Lower Quartile Rent     | float | Rents bellow this figure are in the top 25% of rents for this area in the quarter |
+| Log Std Dev Weekly Rent | int   |                                                                                   |
+
+
 # Deliverable 3
 The naming convention needed for our code to work is "listings-yy-mm.cvs" e.g. listings-26-01 for January 2026
 
