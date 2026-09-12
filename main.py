@@ -187,7 +187,7 @@ def deliverable_3(data):
     # alex check plots and edit axis labels
     plt.show()  # generate plots
 
-def merge_datasets(source_directory = "data/raw", outpath = "data/listings_25-10_26-06.csv"):
+def merge_and_save_listings(source_directory = "data/raw", outpath = "data/listings_25-10_26-06.csv"):
     data = read_data(source_directory)
     data.to_csv(outpath)
 
