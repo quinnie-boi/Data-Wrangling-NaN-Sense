@@ -1,5 +1,7 @@
 # DATA201/422 Data-Wrangling
 # Deliverable 4
+> [!WARNING]
+> Please move the downloaded csv listings into /data/raw. This will keep them separate from the combined and cleaned
 
 ## AirBnB Dataset
 Discovery - [The contents of the dataset](https://docs.google.com/spreadsheets/d/1iWCNJcSutYqpULSQHlNyGInUvHg2BoUGoNRIGa6Szc4/edit?pli=1&gid=1322284596#gid=1322284596) are available from AirBnB

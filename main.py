@@ -6,13 +6,14 @@ from matplotlib.patches import Patch
 # month year column code to be added here
 
 
-def read_data(data_path="data"):
+def read_data(data_source="data/raw"):
     """
-
     name format should be: "listings-yy-mm.csv"
+    where yy-mm is the date the data was scraped.
 
-    reads the 9 listings.csv files from the /data folder then
+    reads the 9 listings.csv files from the /data/raw folder then
     merges them in to one dataset which is returned.
+    Also adds a year and month column for the scrape date.
 
     data_path: the relative path to where the csv files are stored
     """
@@ -27,13 +28,12 @@ def read_data(data_path="data"):
     for name in file_names:
         year, month = data_collection_date(name)
         df = pd.read_csv(f"{data_path}/{name}")
-        df["month"] = month
-        df["year"] = year
+        df["scrape_month"] = month
+        df["scrape_year"] = year
         data_files.append(df)
 
     # combines the list of datasets into one pandas data frame
     return pd.concat(data_files)
-
 
 def data_collection_date(data_file_name):
     """
@@ -145,10 +145,7 @@ def plot_rev_hist(rev_values):
     axes.set_ylabel("Count/Number of properties")
     axes.legend(handles=legend_elements, title="Review count")
 
-
-def main():
-    data = read_data()
-    data.to_csv("data/concatenated data 25-10 to 26-06.csv")
+def deliverable_3(data):
     print(data[["number_of_reviews", "price"]].head())
     print(data[["number_of_reviews", "price"]].describe())
 
@@ -190,6 +187,33 @@ def main():
     # alex check plots and edit axis labels
     plt.show()  # generate plots
 
+def merge_datasets(source_directory = "data/raw", outpath = "data/listings_25-10_26-06.csv"):
+    data = read_data(source_directory)
+    data.to_csv(outpath)
+
+def open_dataset(path = "data/listings_25-10_26-06.csv"):
+    return pd.read_csv(path,
+        parse_dates=["last_review", "month", "year"],
+        date_format={
+            "last_review": "%yyyy-%mm-%dd",
+            "month":"%mm",
+            "year":"%yyyy"
+        }
+    )
+
+
+def main():
+    data = open_dataset()
+    # Drop select columns
+    data.drop(axis=1, labels=[
+        "Unnamed: 0", # remove the automatic 0 indexed row number.
+        "name",
+        "host_name",
+        "neighbourhood",
+        "minimum_nights",
+        "reviews_per_month",
+        "license"
+    ], inplace=True)
 
 if __name__ == "__main__":
     main()
