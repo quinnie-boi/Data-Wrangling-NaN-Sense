@@ -3,8 +3,8 @@
 > [!WARNING]
 > Please move the downloaded csv listings into /data/raw. This will keep them separate from the combined and cleaned
 
-Detailed quarterly report, 2020-2026 of rental bond data
-
+## Detailed quarterly report, 2020-2026 of rental bond data
+Discovery - [https://www.tenancy.govt.nz/about-tenancy-services/data-and-statistics/rental-bond-data/]
 | Variable                | Type  | Description                                                                       |
 |-------------------------|-------|-----------------------------------------------------------------------------------|
 | TimeFrame               | date  | Date ended for quarter in which bond was lodged                                   |
