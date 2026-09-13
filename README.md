@@ -4,18 +4,21 @@
 > Please move the downloaded csv listings into /data/raw. This will keep them separate from the combined and cleaned
 
 ## Detailed quarterly report, 2020-2026 of rental bond data
+Rental bond data from dwellings rented by private landlords
+note: The files are updated each month and do not include the most recent month’s data, for example files released in 
+July will contain information up to the end of May
 Discovery - [https://www.tenancy.govt.nz/about-tenancy-services/data-and-statistics/rental-bond-data/]
 | Variable                | Type  | Description                                                                       |
 |-------------------------|-------|-----------------------------------------------------------------------------------|
 | TimeFrame               | date  | Date ended for quarter in which bond was lodged                                   |
-| Location Id             | float |                                                                                   |
+| Location Id             | float | SA2-2019 area code                                                                |
 | DwellingType            | text  | Type of accomodation (room, flat, etc)                                            |
 | Number Of Beds          | float | (mixed??) Number of bedrooms in dwelling of bond registered                       |
 | Total Bonds             | float |                                                                                   |
 | Active Bonds            | float |                                                                                   |
 | Closed Bonds            | float | Number of bonds closed/returned in the quarter                                    |
 | Median Rent             | float | Median rent for dwellings in the quarter                                          |
-| Geometric Mean          | float |                                                                                   |
+| Geometric Mean          | float | Calculated by multiplying values together and taking the nth root of the result   |
 | Upper Quartile Rent     | float | Rents above this figure are in the top 25% of rents for this area in the quarter  |
 | Lower Quartile Rent     | float | Rents bellow this figure are in the top 25% of rents for this area in the quarter |
 | Log Std Dev Weekly Rent | int   |                                                                                   |
