@@ -3,6 +3,22 @@
 > [!WARNING]
 > Please move the downloaded csv listings into /data/raw. This will keep them separate from the combined and cleaned
 
+
+| Variable                | Type  | Description                                                                       |
+|-------------------------|-------|-----------------------------------------------------------------------------------|
+| TimeFrame               | date  | Date ended for quarter in which bond was lodged                                   |
+| Location Id             | float |                                                                                   |
+| DwellingType            | text  | Type of accomodation (room, flat, etc)                                            |
+| Number Of Beds          | float | (mixed??) Number of bedrooms in dwelling of bond registered                       |
+| Total Bonds             | float |                                                                                   |
+| Active Bonds            | float |                                                                                   |
+| Closed Bonds            | float | Number of bonds closed/returned in the quarter                                    |
+| Median Rent             | float | Median rent for dwellings in the quarter                                          |
+| Geometric Mean          | float |                                                                                   |
+| Upper Quartile Rent     | float | Rents above this figure are in the top 25% of rents for this area in the quarter  |
+| Lower Quartile Rent     | float | Rents bellow this figure are in the top 25% of rents for this area in the quarter |
+| Log Std Dev Weekly Rent | int   |                                                                                   |
+
 ## AirBnB Dataset
 Discovery - [The contents of the dataset](https://docs.google.com/spreadsheets/d/1iWCNJcSutYqpULSQHlNyGInUvHg2BoUGoNRIGa6Szc4/edit?pli=1&gid=1322284596#gid=1322284596) are available from AirBnB
 
