@@ -18,7 +18,7 @@ Discovery - [https://www.tenancy.govt.nz/about-tenancy-services/data-and-statist
 | TimeFrame               | date  | Date ended for quarter in which bond was lodged                                   |
 | Location Id             | float | SA2-2019 area code                                                                |
 | DwellingType            | text  | Type of accomodation (room, flat, etc)                                            |
-| Number Of Beds          | float | (mixed??) Number of bedrooms in dwelling of bond registered                       |
+| Number Of Beds          | float | Meant to be one of [1, 2, 3, 4, 5+]. Actually one of [0,1,2,3,4,5,6,7,8,9,15,5+ ALL, NA]. Number of bedrooms in dwelling of bond registered                       |
 | Total Bonds             | float |                                                                                   |
 | Active Bonds            | float | Number of active bonds at end of quarter                                                                                  |
 | Closed Bonds            | float | Number of bonds closed/returned in the quarter                                    |

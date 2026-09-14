@@ -220,12 +220,17 @@ def main():
     # filter quart-tenancy/bond data to same dates as airbnb
     quarterly_data = open_quarterly_dataset()
 
-    # print(quarterly_data.isnull().sum())
-    # magic_rows = quarterly_data[quarterly_data['Location Id'] == -99]
-    # print(magic_rows.describe())
-    # print(quarterly_data.describe())
+    # Remove NA Values
+    quarterly_data.dropna(inplace=True)
+
+    # Remove rows where Location Id == -99
+    quarterly_data = quarterly_data[quarterly_data["Location Id"] != -99]
 
     # drop select columns from bond dataset
+
+    quarterly_data.drop(axis=1, labels=[
+        ""
+    ])
 
 if __name__ == "__main__":
     main()
