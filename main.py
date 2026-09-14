@@ -191,19 +191,20 @@ def merge_and_save_listings(source_directory = "data/raw", outpath = "data/listi
     data = read_data(source_directory)
     data.to_csv(outpath)
 
-def open_dataset(path = "data/listings_25-10_26-06.csv"):
+def open_listings_dataset(path = "data/listings_25-10_26-06.csv"):
     return pd.read_csv(path,
-        parse_dates=["last_review", "month", "year"],
-        date_format={
-            "last_review": "%yyyy-%mm-%dd",
-            "month":"%mm",
-            "year":"%yyyy"
-        }
+        parse_dates=["last_review"],
+        delimiter=','
     )
 
+def open_quarterly_dataset(path = "data/quarterly_2025_2026.csv"):
+    return pd.read_csv(path,
+        parse_dates=["TimeFrame"],
+        date_format="%yyyy-%mm-%dd"
+    )
 
 def main():
-    data = open_dataset()
+    data = open_listings_dataset()
     # deliverable 4
     # drop select columns from airbnb dataset
     data.drop(axis=1, labels=[
@@ -217,7 +218,12 @@ def main():
     ], inplace=True)
 
     # filter quart-tenancy/bond data to same dates as airbnb
+    quarterly_data = open_quarterly_dataset()
 
+    # print(quarterly_data.isnull().sum())
+    # magic_rows = quarterly_data[quarterly_data['Location Id'] == -99]
+    # print(magic_rows.describe())
+    # print(quarterly_data.describe())
 
     # drop select columns from bond dataset
 
