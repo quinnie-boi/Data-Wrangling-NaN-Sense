@@ -7,26 +7,28 @@
 Rental bond data from dwellings rented by private landlords
 note: The files are updated each month and do not include the most recent month’s data, for example files released in 
 July will contain information up to the end of May
-Discovery - [https://www.tenancy.govt.nz/about-tenancy-services/data-and-statistics/rental-bond-data/]
 
-> It is listed by tenancy start date and uses the [SA2-2019 area definitions](https://datafinder.stats.govt.nz/layer/98970-statistical-area-2-2019-generalised/) from Statistics NZ
-> Privacy protection measures have been applied; fixed random rounding is applied to [base 3](https://bayesiandemography.github.io/poputils/reference/rr3.html#details) and there is a suppression of results when there are fewer than 5 bonds for any given selection.
+It is listed by tenancy start date and uses the [SA2-2019 area definitions](https://datafinder.stats.govt.nz/layer/98970-statistical-area-2-2019-generalised/) from Statistics NZ
+Privacy protection measures have been applied; fixed random rounding is applied to [base 3](https://bayesiandemography.github.io/poputils/reference/rr3.html#details) and there is a suppression of results when there are fewer than 5 bonds for any given selection.
+Discovery - [https://www.tenancy.govt.nz/about-tenancy-services/data-and-statistics/rental-bond-data/] 
+Source credit: 'The Ministry of Business, Innovation and Employment'
+
+| Variable                | Type  | Description                                                                                                                                | Keep | Reason                                   |
+|-------------------------|-------|--------------------------------------------------------------------------------------------------------------------------------------------|:----:|------------------------------------------|
+| TimeFrame               | date  | Date ended for quarter in which bond was lodged                                                                                            |  ✅   | Comparison with other dataset            |
+| Location Id             | float | SA2-2019 area code                                                                                                                         |  ✅   | To be compared with the Airbnb locations |
+| DwellingType            | text  | one of [Apartment\|Boarding House\|Flat\|House\|Room]                                                                                      |      |                                          |
+| Number Of Beds          | float | Meant to be one of [1, 2, 3, 4, 5+]. Actually one of [0,1,2,3,4,5,6,7,8,9,15,5+ ALL, NA] Number of bedrooms in dwelling of bond registered |      |                                          |
+| Total Bonds             | float |                                                                                                                                            |  ❌   | Do not need for Airbnb comparison        |
+| Active Bonds            | float | Number of active bonds at end of quarter                                                                                                   |  ❌   | ""                                       |
+| Closed Bonds            | float | Number of bonds closed/returned in the quarter                                                                                             |  ❌   | ""                                       |
+| Median Rent             | float | Median rent for dwellings in the quarter                                                                                                   |      |                                          |
+| Geometric Mean          | float | Calculated by multiplying values together and taking the nth root of the result                                                            |      |                                          |
+| Upper Quartile Rent     | float | Rents above this figure are in the top 25% of rents for this area in the quarter                                                           |      |                                          |
+| Lower Quartile Rent     | float | Rents bellow this figure are in the top 25% of rents for this area in the quarter                                                          |      |                                          |
+| Log Std Dev Weekly Rent | int   | STD DEV of weekly rent                                                                                                                     |      |                                          |
 
 
-| Variable                | Type  | Description                                                                       |
-|-------------------------|-------|-----------------------------------------------------------------------------------|
-| TimeFrame               | date  | Date ended for quarter in which bond was lodged                                   |
-| Location Id             | float | SA2-2019 area code                                                                |
-| DwellingType            | text  | Type of accomodation (room, flat, etc)                                            |
-| Number Of Beds          | float | Meant to be one of [1, 2, 3, 4, 5+]. Actually one of [0,1,2,3,4,5,6,7,8,9,15,5+ ALL, NA]. Number of bedrooms in dwelling of bond registered                       |
-| Total Bonds             | float |                                                                                   |
-| Active Bonds            | float | Number of active bonds at end of quarter                                                                                  |
-| Closed Bonds            | float | Number of bonds closed/returned in the quarter                                    |
-| Median Rent             | float | Median rent for dwellings in the quarter                                          |
-| Geometric Mean          | float | Calculated by multiplying values together and taking the nth root of the result   |
-| Upper Quartile Rent     | float | Rents above this figure are in the top 25% of rents for this area in the quarter  |
-| Lower Quartile Rent     | float | Rents bellow this figure are in the top 25% of rents for this area in the quarter |
-| Log Std Dev Weekly Rent | int   | STD DEV of weekly rent                                                                                  |
 
 ## Weird NA/Null values in Quarterly.
 Since NA and NULL never appear in the same column we can replace both with NA. They may have different semantic meanings but that information won't be lost. 
@@ -78,23 +80,7 @@ max    363300.000000   49875.000000  520821.000000   48384.000000    3350.000000
 
 ## AirBnB Dataset
 Discovery - [The contents of the dataset](https://docs.google.com/spreadsheets/d/1iWCNJcSutYqpULSQHlNyGInUvHg2BoUGoNRIGa6Szc4/edit?pli=1&gid=1322284596#gid=1322284596) are available from AirBnB
-Discovery - [https://www.tenancy.govt.nz/about-tenancy-services/data-and-statistics/rental-bond-data/] 
-Source credit: 'The Ministry of Business, Innovation and Employment'
 
-| Variable                | Type  | Description                                                                       | Keep | Reason                                   |
-|-------------------------|-------|-----------------------------------------------------------------------------------|:----:|------------------------------------------|
-| TimeFrame               | date  | Date ended for quarter in which bond was lodged                                   |  ✅   | Comparison with other dataset            |
-| Location Id             | float | SA2-2019 area code                                                                |  ✅   | To be compared with the Airbnb locations |
-| DwellingType            | text  | one of [Apartment\|Boarding House\|Flat\|House\|Room]                             |      |                                          |
-| Number Of Beds          | float | (mixed??) Number of bedrooms in dwelling of bond registered                       |      |                                          |
-| Total Bonds             | float |                                                                                   |  ❌   | Do not need for Airbnb comparison        |
-| Active Bonds            | float | Number of active bonds at end of quarter                                          |  ❌   | ""                                       |
-| Closed Bonds            | float | Number of bonds closed/returned in the quarter                                    |  ❌   | ""                                       |
-| Median Rent             | float | Median rent for dwellings in the quarter                                          |      |                                          |
-| Geometric Mean          | float | Calculated by multiplying values together and taking the nth root of the result   |      |                                          |
-| Upper Quartile Rent     | float | Rents above this figure are in the top 25% of rents for this area in the quarter  |      |                                          |
-| Lower Quartile Rent     | float | Rents bellow this figure are in the top 25% of rents for this area in the quarter |      |                                          |
-| Log Std Dev Weekly Rent | int   | STD DEV of weekly rent                                                            |      |                                          |
 
 ## Airbnb Dataset
 Discovery - [The contents of the dataset](https://docs.google.com/spreadsheets/d/1iWCNJcSutYqpULSQHlNyGInUvHg2BoUGoNRIGa6Szc4/edit?pli=1&gid=1322284596#gid=1322284596) are available from Airbnb
