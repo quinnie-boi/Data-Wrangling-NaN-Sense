@@ -15,13 +15,13 @@ Discovery - [https://www.tenancy.govt.nz/about-tenancy-services/data-and-statist
 | DwellingType            | text  | Type of accomodation (room, flat, etc)                                            |
 | Number Of Beds          | float | (mixed??) Number of bedrooms in dwelling of bond registered                       |
 | Total Bonds             | float |                                                                                   |
-| Active Bonds            | float |                                                                                   |
+| Active Bonds            | float | Number of active bonds at end of quarter                                                                                  |
 | Closed Bonds            | float | Number of bonds closed/returned in the quarter                                    |
 | Median Rent             | float | Median rent for dwellings in the quarter                                          |
 | Geometric Mean          | float | Calculated by multiplying values together and taking the nth root of the result   |
 | Upper Quartile Rent     | float | Rents above this figure are in the top 25% of rents for this area in the quarter  |
 | Lower Quartile Rent     | float | Rents bellow this figure are in the top 25% of rents for this area in the quarter |
-| Log Std Dev Weekly Rent | int   |                                                                                   |
+| Log Std Dev Weekly Rent | int   | STD DEV of weekly rent                                                                                  |
 
 ## AirBnB Dataset
 Discovery - [The contents of the dataset](https://docs.google.com/spreadsheets/d/1iWCNJcSutYqpULSQHlNyGInUvHg2BoUGoNRIGa6Szc4/edit?pli=1&gid=1322284596#gid=1322284596) are available from AirBnB

@@ -204,7 +204,8 @@ def open_dataset(path = "data/listings_25-10_26-06.csv"):
 
 def main():
     data = open_dataset()
-    # Drop select columns
+    # deliverable 4
+    # drop select columns from airbnb dataset
     data.drop(axis=1, labels=[
         "Unnamed: 0", # remove the automatic 0 indexed row number.
         "name",
@@ -214,6 +215,11 @@ def main():
         "reviews_per_month",
         "license"
     ], inplace=True)
+
+    # filter quart-tenancy/bond data to same dates as airbnb
+
+
+    # drop select columns from bond dataset
 
 if __name__ == "__main__":
     main()
