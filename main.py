@@ -193,15 +193,14 @@ def merge_and_save_listings(source_directory = "data/raw", outpath = "data/listi
 
 def open_listings_dataset(path = "data/listings_25-10_26-06.csv"):
     return pd.read_csv(path,
-        parse_dates=["last_review"],
-        delimiter=','
+        parse_dates=["last_review"]
     )
 
 def open_quarterly_dataset(path = "data/quarterly_2025_2026.csv"):
     return pd.read_csv(path,
-        parse_dates=["TimeFrame"],
-        date_format="%yyyy-%mm-%dd"
+        parse_dates=["TimeFrame"]
     )
+
 
 def main():
     data = open_listings_dataset()
@@ -211,7 +210,7 @@ def main():
         "Unnamed: 0", # remove the automatic 0 indexed row number.
         "name",
         "host_name",
-        "neighbourhood",
+        "neighbourhood_group",
         "minimum_nights",
         "reviews_per_month",
         "license"
@@ -221,16 +220,41 @@ def main():
     quarterly_data = open_quarterly_dataset()
 
     # Remove NA Values
-    quarterly_data.dropna(inplace=True)
-
+    quarterly_data.dropna(
+        subset = ["Median Rent"],
+        inplace=True
+    )
     # Remove rows where Location Id == -99
     quarterly_data = quarterly_data[quarterly_data["Location Id"] != -99]
 
-    # drop select columns from bond dataset
+    quarterly_data.replace(to_replace=['5', '6', '7', '8', '9', '15'], value="5+", inplace=True)
+    # print(quarterly_data['Number Of Beds'].value_counts())
+    # print(quarterly_data.dtypes)
 
-    quarterly_data.drop(axis=1, labels=[
-        ""
-    ])
+    # drop select columns from bond dataset
+    oldest = max(quarterly_data["TimeFrame"].min(), data["last_review"].min())
+    newest = min(quarterly_data["TimeFrame"].max(), data["last_review"].max())
+    # oldest, newest = quarterly_data["TimeFrame"].min(), data["last_review"].max()
+    # print(type(oldest), type(newest))
+    # quarterly: 2020-01-01 to 2026-04-01
+    # listings: 2013-03-03 to 2026-06-22
+    print(data[data["last_review"] == data["last_review"].min()][["last_review", "host_id", "year"]].describe())
+
+    data = data[data["last_review"].ge(oldest)]
+    data = data[data["last_review"].le(newest)]
+    # doesn't actually change anything atm
+    quarterly_data = quarterly_data[quarterly_data["TimeFrame"].ge(oldest)]
+    quarterly_data = quarterly_data[quarterly_data["TimeFrame"].le(newest)]
+
+    # quarterly_data.drop(axis=1, labels=[
+    #     "Total Bonds",
+    #     "Active Bonds",
+    #     "Closed Bonds"
+    # ], inplace=True)
+
+    # print(quarterly_data.describe())
+    # print(quarterly_data.isna().sum())
+
 
 if __name__ == "__main__":
     main()
