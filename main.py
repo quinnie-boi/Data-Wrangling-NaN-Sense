@@ -117,17 +117,21 @@ def merge_and_save_listings(source_directory = "data/raw", outpath = "data/listi
 
 def open_listings_dataset(path = "data/listings_25-10_26-06.csv"):
     return pd.read_csv(path,
-        parse_dates=["last_review"]
+        parse_dates=["last_review"],
+        index_col=0
     )
 
 def open_quarterly_dataset(path = "data/quarterly_2025_2026.csv"):
     return pd.read_csv(path,
-        parse_dates=["TimeFrame"]
+        parse_dates=["TimeFrame"],
+        index_col=0
     )
 
 
 def main():
     data = open_listings_dataset()
+    chch_data = data[data["neighbourhood_group"] == "Christchurch City"].copy()
+
     # deliverable 4
 
     print(data[["number_of_reviews", "price"]].head())
@@ -135,7 +139,6 @@ def main():
     chch_data = data[data["neighbourhood_group"] == "Christchurch City"].copy()
     # drop select columns from airbnb dataset
     chch_data.drop(axis=1, labels=[
-        "Unnamed: 0", # remove the automatic 0 indexed row number.
         "name",
         "host_name",
         "neighbourhood_group", # they are all in Christchurch City
@@ -207,6 +210,9 @@ def main():
     # print(quarterly_data.describe())
     # print(quarterly_data.isna().sum())
 
+    # quarterly_data.drop(axis=1, labels=[
+    #     ""
+    # ])
 
 if __name__ == "__main__":
     main()
