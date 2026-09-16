@@ -72,6 +72,8 @@ def clean_airbnb_dataset():
     # TODO Change the API of this function
     days_since_review(df)
 
+    # Coerce columns into category datatype,
+    # automatically generated based on existing values.
     for category in ['neighbourhood', 'room_type']:
         df[category] = df[category].astype('category')
 
@@ -110,8 +112,8 @@ def main():
     # print(airbnb_data.dtypes)
     # print(rental_data.dtypes)
 
-    print(rental_data.describe())
-    print(rental_data.isna().sum())
+    # print(rental_data.describe())
+    # print(rental_data.isna().sum())
 
 if __name__ == "__main__":
     main()
