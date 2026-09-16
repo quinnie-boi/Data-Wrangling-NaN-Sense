@@ -3,8 +3,6 @@ import numpy as np
 import pandas as pd
 from matplotlib.patches import Patch
 
-# month year column code to be added here
-
 
 def read_data(data_source="data/raw"):
     """
@@ -52,25 +50,6 @@ def data_collection_date(data_file_name):
     month = int(yy_mm[-2:])
     return year, month
 
-
-# price histogram
-
-# remove missing price values??
-
-
-def plot_hist(values, title):
-    """plot the prices in a histogram"""
-    price = values["price"]
-    plt.figure(figsize=(8, 6))
-    axes = plt.axes()
-    axes.hist(
-        price, bins=np.linspace(0, 1500, 16), edgecolor="steelblue", color="skyblue"
-    )
-    axes.set_title(title)
-    axes.set_xlabel("Nightly price ($)")
-    axes.set_ylabel("Count")
-
-
 # days since last review --> chch_data daytime format is in
 def str_to_date(data):
     """convert string format of date in last-review column (YYYY-MM-DD) to date"""
@@ -78,72 +57,17 @@ def str_to_date(data):
         data["last_review"], format="%Y-%m-%d", errors="coerce"
     )  # change NaN from float
 
-
 def days_since_review(data):
-    """how many days since the last review??"""
+    """
+    Add a column containing the number of days since last review, relative to the
+    latest date in the data. i.e. data["days_since_last_review"].min() == 0
+    """
+    latest_review = data["last_review"].max()
+    print("INFO <days_since_review>: latest review was", latest_review)
+
     data["days_since_last_review"] = (
-        pd.to_datetime("2026-06-22",format="%Y-%m-%d") - data["last_review"]
+        pd.to_datetime(latest_review,format="%Y-%m-%d") - data["last_review"]
     ).dt.days
-
-
-# plot in histogram
-def plot_day_hist(day_values):
-    """plot days since last view into a histogram"""
-    days = day_values["days_since_last_review"]
-    plt.figure(figsize=(8, 6))
-    axes = plt.axes()
-    axes.hist(days, edgecolor="orchid", color="thistle", bins=np.linspace(0, 3000, 31))
-    axes.set_title("Days since last review (CHCH, 19 June 2026)")
-    axes.set_xlabel("Days")
-    axes.set_ylabel("Count")
-
-
-# plot in histogram
-def plot_rev_hist(rev_values):
-    """number of reviews per property in CHCH"""
-    reviews = rev_values["number_of_reviews"]
-    plt.figure(figsize=(8, 6))
-    axes = plt.axes()
-
-    bins = np.concatenate([
-        np.linspace(0, 600, 30),
-        [np.inf],
-    ])
-    counts, bins, patches = axes.hist(
-        reviews,
-        edgecolor="seagreen",
-        color="mediumaquamarine",
-        bins=bins,
-    )
-    # recolor bins for reviews in top 10%
-    for patch, left_edge in zip(patches, bins[:-1]):
-        if left_edge >= 183:
-            patch.set_facecolor("powderblue")
-    # recolor top end
-    patches[-1].set_facecolor('coral')
-    # legend time
-    legend_elements = [
-        Patch(
-            facecolor="mediumaquamarine",
-            edgecolor="seagreen",
-            label="Bottom 90% of reviews (<183)",
-        ),
-        Patch(
-            facecolor="powderblue",
-            edgecolor="seagreen",
-            label="Top 10% of reviews (>=183 and <600)",
-        ),
-        Patch(
-            facecolor="coral",
-            edgecolor="seagreen",
-            label='>600 reviews'
-        )
-    ]
-
-    axes.set_title("Number of reviews per property in CHCH")
-    axes.set_xlabel("Number of Reviews")
-    axes.set_ylabel("Count/Number of properties")
-    axes.legend(handles=legend_elements, title="Review count")
 
 def deliverable_3(data):
     print(data[["number_of_reviews", "price"]].head())
@@ -205,31 +129,41 @@ def open_quarterly_dataset(path = "data/quarterly_2025_2026.csv"):
 def main():
     data = open_listings_dataset()
     # deliverable 4
+
+    print(data[["number_of_reviews", "price"]].head())
+    print(data[["number_of_reviews", "price"]].describe())
+    chch_data = data[data["neighbourhood_group"] == "Christchurch City"].copy()
     # drop select columns from airbnb dataset
-    data.drop(axis=1, labels=[
+    chch_data.drop(axis=1, labels=[
         "Unnamed: 0", # remove the automatic 0 indexed row number.
         "name",
         "host_name",
-        "neighbourhood_group",
+        "neighbourhood_group", # they are all in Christchurch City
         "minimum_nights",
         "reviews_per_month",
         "license"
     ], inplace=True)
 
+    days_since_review(chch_data)
+
     # filter quart-tenancy/bond data to same dates as airbnb
     quarterly_data = open_quarterly_dataset()
 
-    # Remove NA Values
+    print(quarterly_data.columns)
+    # Remove the 803 weird and unsuable rows containg 4-5 NA Values
     quarterly_data.dropna(
         subset = ["Median Rent"],
         inplace=True
     )
+
     # Remove rows where Location Id == -99
     quarterly_data = quarterly_data[quarterly_data["Location Id"] != -99]
 
-    quarterly_data.replace(to_replace=['5', '6', '7', '8', '9', '15'], value="5+", inplace=True)
-    # print(quarterly_data['Number Of Beds'].value_counts())
-    # print(quarterly_data.dtypes)
+    # standardise Number Of Beds column
+    quarterly_data['Number Of Beds'] = quarterly_data['Number Of Beds'].replace(to_replace=['5', '6', '7', '8', '9', '15'], value="5+")
+    print(quarterly_data['Number Of Beds'].value_counts())
+    print(quarterly_data.dtypes)
+
 
     # drop select columns from bond dataset
     oldest = max(quarterly_data["TimeFrame"].min(), data["last_review"].min())
