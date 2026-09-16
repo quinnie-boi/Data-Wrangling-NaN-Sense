@@ -53,7 +53,7 @@ def clean_quarterly_dataset():
 
     return df
 
-def clean_AirBnB_dataset():
+def clean_airbnb_dataset():
     """"""
     df = open_listings_dataset()
     df = df[df["neighbourhood_group"] == "Christchurch City"].copy()
@@ -72,11 +72,14 @@ def clean_AirBnB_dataset():
     # TODO Change the API of this function
     days_since_review(df)
 
+    for category in ['neighbourhood', 'room_type']:
+        df[category] = df[category].astype('category')
+
     return df
 
 def main():
     rental_data = clean_quarterly_dataset()
-    airbnb_data = clean_AirBnB_dataset()
+    airbnb_data = clean_airbnb_dataset()
 
     # TODO The oldest date is 2020-01-01 which is IMPOSSIBLE given
     # the listings data only goes back to 25-10.
@@ -104,8 +107,8 @@ def main():
     # print(quarterly_data['Dwelling Type'].cat.categories.tolist())
 
     # Check that the datatypes of each column are correct
-    print(airbnb_data.dtypes)
-    print(rental_data.dtypes)
+    # print(airbnb_data.dtypes)
+    # print(rental_data.dtypes)
 
     print(rental_data.describe())
     print(rental_data.isna().sum())
