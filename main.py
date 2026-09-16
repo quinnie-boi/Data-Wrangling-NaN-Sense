@@ -127,7 +127,6 @@ def open_quarterly_dataset(path = "data/quarterly_2025_2026.csv"):
         index_col=0
     )
 
-
 def main():
     data = open_listings_dataset()
     chch_data = data[data["neighbourhood_group"] == "Christchurch City"].copy()
