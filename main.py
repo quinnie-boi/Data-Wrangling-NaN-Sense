@@ -3,7 +3,6 @@ import numpy as np
 import pandas as pd
 from matplotlib.patches import Patch
 
-
 def read_data(data_source="data/raw"):
     """
     name format should be: "listings-yy-mm.csv"
@@ -117,14 +116,12 @@ def merge_and_save_listings(source_directory = "data/raw", outpath = "data/listi
 
 def open_listings_dataset(path = "data/listings_25-10_26-06.csv"):
     return pd.read_csv(path,
-        parse_dates=["last_review"],
-        index_col=0
+        parse_dates=["last_review"]
     )
 
 def open_quarterly_dataset(path = "data/quarterly_2025_2026.csv"):
     return pd.read_csv(path,
-        parse_dates=["TimeFrame"],
-        index_col=0
+        parse_dates=["TimeFrame"]
     )
 
 def main():
@@ -163,11 +160,15 @@ def main():
 
     # standardise Number Of Beds column
     quarterly_data['Number Of Beds'] = quarterly_data['Number Of Beds'].replace(to_replace=['5', '6', '7', '8', '9', '15'], value="5+")
+
+    quarterly_data['Number Of Beds'] = quarterly_data['Number Of Beds'].astype('category')
+    quarterly_data['Dwelling Type'] = quarterly_data['Number Of Beds'].astype('category')
+
     print(quarterly_data['Number Of Beds'].value_counts())
-    print(quarterly_data.dtypes)
+    print(quarterly_data['Number Of Beds'].cat.categories.tolist())
+    print(quarterly_data['Dwelling Type'].cat.categories.tolist())
 
     # Fix datatypes, categorise columns into strict values where possible. Use .map function
-    #
     ##### Plan #####
     #
     #     Column              |   Current       |  Ideal
