@@ -164,6 +164,24 @@ def main():
     print(quarterly_data['Number Of Beds'].value_counts())
     print(quarterly_data.dtypes)
 
+    # Fix datatypes, categorise columns into strict values where possible. Use .map function
+    #
+    ##### Plan #####
+    #
+    #     Column              |   Current       |  Ideal
+    # TimeFrame               |  datetime64[ns] | datetime
+    # Location Id             |         float64 | int
+    # Dwelling Type           |          object | category
+    # Number Of Beds          |          object | category
+    # Total Bonds             |           int64 | int
+    # Active Bonds            |           int64 | int
+    # Closed Bonds            |           int64 | int
+    # Median Rent             |         float64 | float
+    # Geometric Mean Rent     |         float64 | float
+    # Upper Quartile Rent     |         float64 | float
+    # Lower Quartile Rent     |         float64 | float
+    # Log Std Dev Weekly Rent |         float64 | float
+
 
     # drop select columns from bond dataset
     oldest = max(quarterly_data["TimeFrame"].min(), data["last_review"].min())
