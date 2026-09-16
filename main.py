@@ -6,13 +6,14 @@ from matplotlib.patches import Patch
 # month year column code to be added here
 
 
-def read_data(data_path="data"):
+def read_data(data_source="data/raw"):
     """
-
     name format should be: "listings-yy-mm.csv"
+    where yy-mm is the date the data was scraped.
 
-    reads the 9 listings.csv files from the /data folder then
+    reads the 9 listings.csv files from the /data/raw folder then
     merges them in to one dataset which is returned.
+    Also adds a year and month column for the scrape date.
 
     data_path: the relative path to where the csv files are stored
     """
@@ -27,13 +28,12 @@ def read_data(data_path="data"):
     for name in file_names:
         year, month = data_collection_date(name)
         df = pd.read_csv(f"{data_path}/{name}")
-        df["month"] = month
-        df["year"] = year
+        df["scrape_month"] = month
+        df["scrape_year"] = year
         data_files.append(df)
 
     # combines the list of datasets into one pandas data frame
     return pd.concat(data_files)
-
 
 def data_collection_date(data_file_name):
     """
@@ -145,10 +145,7 @@ def plot_rev_hist(rev_values):
     axes.set_ylabel("Count/Number of properties")
     axes.legend(handles=legend_elements, title="Review count")
 
-
-def main():
-    data = read_data()
-    data.to_csv("data/concatenated data 25-10 to 26-06.csv")
+def deliverable_3(data):
     print(data[["number_of_reviews", "price"]].head())
     print(data[["number_of_reviews", "price"]].describe())
 
@@ -189,6 +186,74 @@ def main():
     # alex/syamily to generate final visualisation
     # alex check plots and edit axis labels
     plt.show()  # generate plots
+
+def merge_and_save_listings(source_directory = "data/raw", outpath = "data/listings_25-10_26-06.csv"):
+    data = read_data(source_directory)
+    data.to_csv(outpath)
+
+def open_listings_dataset(path = "data/listings_25-10_26-06.csv"):
+    return pd.read_csv(path,
+        parse_dates=["last_review"]
+    )
+
+def open_quarterly_dataset(path = "data/quarterly_2025_2026.csv"):
+    return pd.read_csv(path,
+        parse_dates=["TimeFrame"]
+    )
+
+
+def main():
+    data = open_listings_dataset()
+    # deliverable 4
+    # drop select columns from airbnb dataset
+    data.drop(axis=1, labels=[
+        "Unnamed: 0", # remove the automatic 0 indexed row number.
+        "name",
+        "host_name",
+        "neighbourhood_group",
+        "minimum_nights",
+        "reviews_per_month",
+        "license"
+    ], inplace=True)
+
+    # filter quart-tenancy/bond data to same dates as airbnb
+    quarterly_data = open_quarterly_dataset()
+
+    # Remove NA Values
+    quarterly_data.dropna(
+        subset = ["Median Rent"],
+        inplace=True
+    )
+    # Remove rows where Location Id == -99
+    quarterly_data = quarterly_data[quarterly_data["Location Id"] != -99]
+
+    quarterly_data.replace(to_replace=['5', '6', '7', '8', '9', '15'], value="5+", inplace=True)
+    # print(quarterly_data['Number Of Beds'].value_counts())
+    # print(quarterly_data.dtypes)
+
+    # drop select columns from bond dataset
+    oldest = max(quarterly_data["TimeFrame"].min(), data["last_review"].min())
+    newest = min(quarterly_data["TimeFrame"].max(), data["last_review"].max())
+    # oldest, newest = quarterly_data["TimeFrame"].min(), data["last_review"].max()
+    # print(type(oldest), type(newest))
+    # quarterly: 2020-01-01 to 2026-04-01
+    # listings: 2013-03-03 to 2026-06-22
+    print(data[data["last_review"] == data["last_review"].min()][["last_review", "host_id", "year"]].describe())
+
+    data = data[data["last_review"].ge(oldest)]
+    data = data[data["last_review"].le(newest)]
+    # doesn't actually change anything atm
+    quarterly_data = quarterly_data[quarterly_data["TimeFrame"].ge(oldest)]
+    quarterly_data = quarterly_data[quarterly_data["TimeFrame"].le(newest)]
+
+    # quarterly_data.drop(axis=1, labels=[
+    #     "Total Bonds",
+    #     "Active Bonds",
+    #     "Closed Bonds"
+    # ], inplace=True)
+
+    # print(quarterly_data.describe())
+    # print(quarterly_data.isna().sum())
 
 
 if __name__ == "__main__":
