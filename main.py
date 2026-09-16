@@ -1,7 +1,5 @@
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from matplotlib.patches import Patch
 
 def days_since_review(data):
     """
@@ -15,9 +13,7 @@ def days_since_review(data):
         pd.to_datetime(latest_review,format="%Y-%m-%d") - data["last_review"]
     ).dt.days
 
-
-
-def open_listings_dataset(path = "data/listings_25-10_26-06.csv"):
+def open_airbnb_dataset(path = "data/listings_25-10_26-06.csv"):
     return pd.read_csv(path,
         parse_dates=["last_review"],
         index_col=0 # use id as the index column
@@ -53,9 +49,9 @@ def clean_quarterly_dataset():
 
     return df
 
-def clean_airbnb_dataset():
+def cleaned_airbnb_dataset():
     """"""
-    df = open_listings_dataset()
+    df = open_airbnb_dataset()
     df = df[df["neighbourhood_group"] == "Christchurch City"].copy()
 
     # drop select columns from airbnb dataset
@@ -81,7 +77,7 @@ def clean_airbnb_dataset():
 
 def main():
     rental_data = clean_quarterly_dataset()
-    airbnb_data = clean_airbnb_dataset()
+    airbnb_data = cleaned_airbnb_dataset()
 
     # TODO The oldest date is 2020-01-01 which is IMPOSSIBLE given
     # the listings data only goes back to 25-10.
