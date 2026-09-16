@@ -1,5 +1,13 @@
+"""
+Created for Deliverable 3
+
+Imports the nine airbnb listing dataset csv files from a folder and
+merges them into one larger dataset which is saved to disk.
+"""
+
 import os
 import pandas as pd
+
 
 def file_names_in(source_dir, pattern = "listings"):
     """
