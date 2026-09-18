@@ -21,13 +21,13 @@ def read_data(data_source="data/raw"):
 
     # Automatically finds all files containing "listings" in the name
     pattern = "listings"
-    file_names = [f for f in os.listdir(data_path) if pattern in f]
+    file_names = [f for f in os.listdir(data_source) if pattern in f]
 
     # reads all of the files using pandas (pd), adding them to a list
     data_files = []
     for name in file_names:
         year, month = data_collection_date(name)
-        df = pd.read_csv(f"{data_path}/{name}")
+        df = pd.read_csv(f"{data_source}/{name}")
         df["scrape_month"] = month
         df["scrape_year"] = year
         data_files.append(df)
