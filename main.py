@@ -54,10 +54,6 @@ def data_collection_date(data_file_name):
 
 
 # price histogram
-
-# remove missing price values??
-
-
 def plot_hist(values, title):
     """plot the prices in a histogram"""
     price = values["price"]
