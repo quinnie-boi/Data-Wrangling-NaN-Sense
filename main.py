@@ -21,13 +21,13 @@ def read_data(data_source="data/raw"):
 
     # Automatically finds all files containing "listings" in the name
     pattern = "listings"
-    file_names = [f for f in os.listdir(data_path) if pattern in f]
+    file_names = [f for f in os.listdir(data_source) if pattern in f]
 
     # reads all of the files using pandas (pd), adding them to a list
     data_files = []
     for name in file_names:
         year, month = data_collection_date(name)
-        df = pd.read_csv(f"{data_path}/{name}")
+        df = pd.read_csv(f"{data_source}/{name}")
         df["scrape_month"] = month
         df["scrape_year"] = year
         data_files.append(df)
@@ -238,7 +238,9 @@ def main():
     # print(type(oldest), type(newest))
     # quarterly: 2020-01-01 to 2026-04-01
     # listings: 2013-03-03 to 2026-06-22
-    print(data[data["last_review"] == data["last_review"].min()][["last_review", "host_id", "year"]].describe())
+
+    # have commented out as it looks like this is for the airbnb data set but uses the rental dataframe - Alex
+    # print(data[data["last_review"] == data["last_review"].min()][["last_review", "host_id", "year"]].describe())
 
     data = data[data["last_review"].ge(oldest)]
     data = data[data["last_review"].le(newest)]
