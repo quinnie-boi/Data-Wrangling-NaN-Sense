@@ -1,6 +1,13 @@
 # DATA201/422 Data-Wrangling
 # Deliverable 5
+Statistical Area 2 2026 layer ID: 123515  
+Retrieved from: 
+https://datafinder.stats.govt.nz/services/query/v1/vector.json?key=0deb3efae8f6415d9f1d7bdc3522ab85&layer=123515&x=[x]&y=[y]&max_results=3&radius=10000&geometry=true&with_field_names=true
+-----
+If we were to use the SA2 2019 layer, the ID is: 98970
+https://datafinder.stats.govt.nz/layer/98970-statistical-area-2-2019-generalised/
 
+Cleaned Airbnb data (from Prasanthi and Robbie, using Prasanthi's API code) with SA2 area codes and names saved under `dataset_with_sa2.csv`
 
 
 
