@@ -201,7 +201,7 @@ def open_quarterly_dataset(path = "data/quarterly_2025_2026.csv"):
         parse_dates=["TimeFrame"]
     )
 
-# Join 
+# Join dataset_with_sa2.csv with quarterly_2025_2026 (rental data)
 
 def main():
     data = open_listings_dataset()

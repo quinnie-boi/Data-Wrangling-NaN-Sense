@@ -9,7 +9,7 @@ https://datafinder.stats.govt.nz/layer/98970-statistical-area-2-2019-generalised
 
 Cleaned Airbnb data (from Prasanthi and Robbie, using Prasanthi's API code) with SA2 area codes and names saved under `dataset_with_sa2.csv`
 
-
+Cleaned Rental data: `quarterly_2025_2026.csv`
 
 
 
