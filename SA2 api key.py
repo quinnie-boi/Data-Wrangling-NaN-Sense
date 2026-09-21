@@ -30,7 +30,7 @@ OUTPUT_FILE = "data/dataset_with_sa2.csv"
 
 # CORRECT API URL (Updated from general stats.govt.nz domain)
 API_URL = "https://datafinder.stats.govt.nz/services/query/v1/vector.json?key=0deb3efae8f6415d9f1d7bdc3522ab85&layer=123515&x=[x]&y=[y]&max_results=3&radius=10000&geometry=true&with_field_names=true"
-# AlEX API URL - SA2 2019
+# AlEX API URL - SA2 2019 <- if we want to change it to the SA2 2019 version and not the 2026 version
 API_ALEX = 'https://datafinder.stats.govt.nz/layer/98779-statistical-area-2-higher-geographies-2019-generalised/'
 
 def get_sa2_data(longitude, latitude):
