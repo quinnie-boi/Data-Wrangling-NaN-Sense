@@ -15,7 +15,7 @@ def read_data(data_source="data/raw"):
     merges them in to one dataset which is returned.
     Also adds a year and month column for the scrape date.
 
-    data_path: the relative path to where the csv files are stored
+    data_source: the relative path to where the csv files are stored
     """
     import os
 
@@ -54,10 +54,6 @@ def data_collection_date(data_file_name):
 
 
 # price histogram
-
-# remove missing price values??
-
-
 def plot_hist(values, title):
     """plot the prices in a histogram"""
     price = values["price"]
