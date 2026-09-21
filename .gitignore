@@ -1,5 +1,2 @@
-flake.nix
-shell.nix
-flake.lock
 data/
-.zed/
+__pycache__
