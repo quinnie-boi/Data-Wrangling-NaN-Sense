@@ -75,7 +75,10 @@ def cleaned_airbnb_dataset():
 
     return df
 
-def main():
+def clean_both_datasets():
+    """
+
+    """
     rental_data = clean_quarterly_dataset()
     airbnb_data = cleaned_airbnb_dataset()
 
@@ -110,6 +113,13 @@ def main():
 
     # print(rental_data.describe())
     # print(rental_data.isna().sum())
+    rental_data.to_csv("data/cleaned/rental_bonds.csv")
+    airbnb_data.to_csv("data/cleaned/airbnb_listings.csv")
+
+
+
+def main():
+    clean_both_datasets()
 
 if __name__ == "__main__":
     main()
