@@ -1,5 +1,5 @@
 import pandas as pd
-
+import os
 from constants import AIRBNB_FILE_NAME, CLEANED_AIRBNB_FILE, CLEANED_BONDS_FILE, CLEANED_DIR, CLEANED_MERGED_DATASET_FILE
 
 def med_airbnb_price(location_id, filename):
@@ -23,9 +23,6 @@ def med_airbnb_price(location_id, filename):
     #Returns median price
     return df["price"].median()
 
-# Example to test for week 9 deliverable
-median_price = med_airbnb_price(326600,"chch_airbnb_bond_with_sa2_names.csv")
-print(f"Median Airbnb price for location_id 326600: ${median_price:.2f}")
 
 
 def merge_sa2_codes():
@@ -54,6 +51,11 @@ def merge_rental_bonds_and_chch_listings():
     # Written by Syamily :)
     # Tweaked by Quinn
 
+    if os.path.exists(CLEANED_MERGED_DATASET_FILE):
+        print('#'*10, 'INFO', '#'*10)
+        print(f"Skipped merging files {CLEANED_MERGED_DATASET_FILE} already exists.\n\n")
+        return
+
     # Read the datasets
     airbnb = pd.read_csv(
         CLEANED_AIRBNB_FILE.replace(".csv", "_with_sa2.csv"),
@@ -62,10 +64,10 @@ def merge_rental_bonds_and_chch_listings():
     bond = pd.read_csv(CLEANED_BONDS_FILE)
 
     # Check the files before joining
-    print("Airbnb rows:", len(airbnb))
-    print("Bond rows:", len(bond))
-    print("Airbnb columns:\n ", ",\n  ".join(airbnb.columns.tolist()))
-    print("Bond columns:\n ", ",\n  ".join(bond.columns.tolist()))
+    # print("Airbnb rows:", len(airbnb))
+    # print("Bond rows:", len(bond))
+    # print("Airbnb columns:\n ", ",\n  ".join(airbnb.columns.tolist()))
+    # print("Bond columns:\n ", ",\n  ".join(bond.columns.tolist()))
 
     airbnb["listing_date"] = pd.to_datetime(
         airbnb.assign(
@@ -97,17 +99,12 @@ def merge_rental_bonds_and_chch_listings():
         raise TypeError("err")
 
 
-    # Check that each area has only one Bond row per quarter
-    print("Bond duplicate area-quarter pairs:",
-        bond.duplicated(["sa2_code", "quarter"]).sum())
+    # # Check that each area has only one Bond row per quarter
+    # print("Bond duplicate area-quarter pairs:",
+    #     bond.duplicated(["sa2_code", "quarter"]).sum())
 
-    print("Bond quarters:",
-        bond["quarter"].drop_duplicates().tolist())
-
-
-    print(
-        bond.groupby(["sa2_code", "quarter"]).size().value_counts()
-    )
+    # print("Bond quarters:",
+    #     bond["quarter"].drop_duplicates().tolist())
 
     # Join Airbnb with Rental Bond using area code and quarter
     # joined = airbnb.merge(
@@ -131,12 +128,12 @@ def merge_rental_bonds_and_chch_listings():
     print("Rows without Bond match:", (joined["_merge"] == "left_only").sum())
 
     # Check the area-code values in both datasets
-    print("Airbnb SA2 examples:", airbnb["sa2_code"].head(5).tolist())
-    print("Bond SA2 examples:", bond["sa2_code"].head(5).tolist())
+    # print("Airbnb SA2 examples:", airbnb["sa2_code"].head(5).tolist())
+    # print("Bond SA2 examples:", bond["sa2_code"].head(5).tolist())
 
     # Check whether the same area codes appear in both datasets
-    common_codes = set(airbnb["sa2_code"]) & set(bond["sa2_code"])
-    print("Number of common area codes:", len(common_codes))
+    # common_codes = set(airbnb["sa2_code"]) & set(bond["sa2_code"])
+    # print("Number of common area codes:", len(common_codes))
 
     # Check matched and unmatched rows by quarter
     # print("\nMatches by quarter:")
@@ -175,7 +172,7 @@ def prasanthi(df):
     df["price_difference"] = (df["price"] - df["nightly_rental_rate"]).round(2)
 
     # 4. View the updated data
-    print(df)
+    # print(df)
 
     ###I have checked the code upto this section###
     #####chch_airbnb_bond_joined.csv dataset does not contain sa2_names, we need it for this deliverable#####
@@ -203,11 +200,16 @@ def prasanthi(df):
 
     # --- 7. Print the Table ---
     print("--- sa2 Code Areas Ranked by Mean Price Difference (Descending) ---")
-    print(mean_differences_sorted.to_string(index=False))
+    print(mean_differences_sorted.head().to_string(index=False))
 
 
-# merge_rental_bonds_and_chch_listings()
+merge_rental_bonds_and_chch_listings()
 prasanthi(pd.read_csv(CLEANED_MERGED_DATASET_FILE))
+
+
+# Jodi Example to test for week 9 deliverable
+median_price = med_airbnb_price(326600, CLEANED_MERGED_DATASET_FILE)
+print(f"Median Airbnb price for Christchurch Central (SA2: 326600): ${median_price:.2f}")
 
 # Example output
 # sa2_code                           sa2_name  mean_price_difference
