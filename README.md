@@ -100,8 +100,45 @@ Discovery - [The contents of the dataset](https://docs.google.com/spreadsheets/d
 | availabilty_365                | int   | unclear to me. Docs say "avaliability_x. The availability of the listing x days in the future as determined by the calendar. Note a listing may not be available because it has been booked by a guest or blocked by the host." | ✅    |                                                                                                       |
 | number_of_reviews_ltm          | int   | #reviews listing has in the last 12 months                                                                                                                                                                                  | ✅    |                                                                                                       |
 | license                        | text  | license/permit/registration number - appears to be entirely empty column in our dataset                                                                                                                                         | ❌    | Always empty                                                                                          |
+# Workflow and Using Git
+There is a helpful document included called `using_git.md` which gives a brief overview of some useful commands.
+ 
+# Project Setup
+ 
+Before running the project, make sure the following folders exist:
+ 
+```
+data/
+data/uncleaned_airbnb_listings/
+data/cleaned/
+```
 
-# Usage
-The naming convention needed for our code to work is "listings-yy-mm.cvs" e.g. listings-26-01 for January 2026
+The following files must also be added manually:
 
-The listings.csv dataset is stored locally under `deliverable_2/data/listings.csv`. The contents of folders named `data` is excluded from being uploaded to git, with an entry in our `.gitignore`.
+```
+data/uncleaned_bonds.csv
+data/uncleaned_airbnb_listings/listings-yy-mm.csv
+```
+
+There should be nine Airbnb CSV files, and each file must follow the naming format:
+
+```
+listings-yy-mm.csv
+```
+where `yy-mm` is a the year and month as numbers.
+
+## To check that your project data is set up correctly, run:
+```bash
+python setup_project.py
+```
+
+This script will:
+
+ - Check that the required folders exist.
+ - Offer to create any missing folders.
+ - Check that the required CSV files exist.
+ - Verify the Airbnb file naming convention.
+ - Warn about any extra files or folders that may be out of date.
+
+> [!IMPORTANT]
+> The required CSV files are not created automatically and must be downloaded and renamed manually.
