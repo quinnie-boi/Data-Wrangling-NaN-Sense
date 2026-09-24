@@ -1,6 +1,6 @@
 import pandas as pd
 
-from constants import AIRBNB_FILE_NAME, CLEANED_AIRBNB_FILE, CLEANED_BONDS_FILE, CLEANED_MERGED_DATASET_FILE
+from constants import AIRBNB_FILE_NAME, CLEANED_AIRBNB_FILE, CLEANED_BONDS_FILE, CLEANED_DIR, CLEANED_MERGED_DATASET_FILE
 
 def merge_sa2_codes():
     """
@@ -16,8 +16,8 @@ def merge_sa2_codes():
     print(sa2['sa2_code'].summary())
 
     airbnb.to_csv(CLEANED_AIRBNB_FILE.replace(".csv", "_sa2.csv"))
-    
-    
+
+
 
 
 def merge_rental_bonds_and_chch_listings():
@@ -25,29 +25,112 @@ def merge_rental_bonds_and_chch_listings():
     merges our rental bonds dataset with our listings dataset along
     the new sa2_code column.
     """
-    # Waiting on Syamily :)
-    # quick tmp fix
-    # add sa2_name column by merging
-    sa2 = pd.read_csv("data/prasanthi_airbnb_with_sa2.csv", usecols=['sa2_code', 'sa2_name'])
-    merged = pd.read_csv(CLEANED_MERGED_DATASET_FILE)
+    # Written by Syamily :)
+    # Tweaked by Quinn
 
-    # match datatypes
-    # they are object and int64 by defaultw
-    sa2['sa2_code'] = sa2['sa2_code'].astype(str)
-    merged['sa2_code'] = merged['sa2_code'].astype(str)
+    # Read the datasets
+    airbnb = pd.read_csv(
+        CLEANED_AIRBNB_FILE.replace(".csv", "_with_sa2.csv"),
+    )
 
-    if 'sa2_names' in merged.columns:
-        print(f"The dataset file: {CLEANED_MERGED_DATASET_FILE} already contains sa2 code names")
-    else:
-        # print(merged.columns.intersection(sa2.columns))
+    bond = pd.read_csv(CLEANED_BONDS_FILE)
 
-        merged = merged.merge( sa2, on='sa2_code', how="left")
-        merged.to_csv(CLEANED_MERGED_DATASET_FILE)
+    # Check the files before joining
+    print("Airbnb rows:", len(airbnb))
+    print("Bond rows:", len(bond))
+    print("Airbnb columns:\n ", ",\n  ".join(airbnb.columns.tolist()))
+    print("Bond columns:\n ", ",\n  ".join(bond.columns.tolist()))
 
-    
-    
+    airbnb["listing_date"] = pd.to_datetime(
+        airbnb.assign(
+            year=airbnb["scrape_year"] + 2000,
+            month=airbnb["scrape_month"],
+            day=1
+        )[["year", "month", "day"]]
+    )
+
+    # create a quarters column
+    airbnb["quarter"] = airbnb["listing_date"].dt.to_period("Q")
+
+    # Check the result
+    # print(
+    #     "chch listing dates:\n",
+    #     airbnb["listing_date"]
+    #     .drop_duplicates()
+    #     .head()
+    #     .to_string(index=False)
+    # )
+
+    # Prepare the Rental Bond columns for joining
+    bond["quarter"] = pd.to_datetime(bond["TimeFrame"])
+
+    # Make sure both datasets use the same area-code format
+    if bond['sa2_code'].dtype !=  airbnb['sa2_code'].dtype:
+        print(f"rental bonds has sa2_code dtype of {bond['sa2_code'].dtype}")
+        print(f"      airbnb has sa2_code dtype of {airbnb['sa2_code'].dtype}")
+        raise TypeError("err")
 
 
+    # Check that each area has only one Bond row per quarter
+    print("Bond duplicate area-quarter pairs:",
+        bond.duplicated(["sa2_code", "quarter"]).sum())
+
+    print("Bond quarters:",
+        bond["quarter"].drop_duplicates().tolist())
+
+
+    print(
+        bond.groupby(["sa2_code", "quarter"]).size().value_counts()
+    )
+
+    # Join Airbnb with Rental Bond using area code and quarter
+    # joined = airbnb.merge(
+    #     bond,
+    #     on=["sa2_code", "quarter"],
+    #     how="left",
+    #     validate="many_to_one",
+    #     indicator=True
+    # )
+    joined = airbnb.merge(
+        bond,
+        on='sa2_code',
+        how='left',
+        indicator=True
+    )
+
+    # Check the result before saving
+    print("Airbnb rows before join:", len(airbnb))
+    print("Rows after join:", len(joined))
+    print("Rows matched with Bond:", (joined["_merge"] == "both").sum())
+    print("Rows without Bond match:", (joined["_merge"] == "left_only").sum())
+
+    # Check the area-code values in both datasets
+    print("Airbnb SA2 examples:", airbnb["sa2_code"].head(5).tolist())
+    print("Bond SA2 examples:", bond["sa2_code"].head(5).tolist())
+
+    # Check whether the same area codes appear in both datasets
+    common_codes = set(airbnb["sa2_code"]) & set(bond["sa2_code"])
+    print("Number of common area codes:", len(common_codes))
+
+    # Check matched and unmatched rows by quarter
+    # print("\nMatches by quarter:")
+    # print(
+    #     joined.groupby(["quarter", "_merge"], observed=True)
+    #     .size()
+    #     .unstack(fill_value=0)
+    #     .to_string()
+    # )
+
+    # Remove the temporary column used to check matches
+    joined = joined.drop(columns=["_merge"])
+
+    # Save the joined dataset as a new CSV
+    OUTPUT_FILE = CLEANED_MERGED_DATASET_FILE
+
+    joined.to_csv(OUTPUT_FILE, index=False)
+
+    print("Joined dataset saved:", OUTPUT_FILE)
+    print("Final rows:", len(joined))
 
 
 def prasanthi(df):
@@ -97,10 +180,41 @@ def prasanthi(df):
     print(mean_differences_sorted.to_string(index=False))
 
 
-merge_rental_bonds_and_chch_listings()
+# merge_rental_bonds_and_chch_listings()
 prasanthi(pd.read_csv(CLEANED_MERGED_DATASET_FILE))
 
 # Example output
+# sa2_code                           sa2_name  mean_price_difference
+# 317400.0                          Northwood                 512.73
+# 326600.0               Christchurch Central                 394.68
+# 323600.0                       Wigram South                 373.30
+# 316800.0                         Clearwater                 363.30
+# 331900.0                   Heathcote Valley                 334.17
+# 320800.0                      Bryndwr South                 289.86
+# 316600.0                          Yaldhurst                 287.19
+# 332700.0                             Sumner                 286.02
+# 322800.0                        Wigram West                 242.64
+# 322600.0                           Holmwood                 222.06
+# 328800.0                     Lancaster Park                 218.21
+# 323900.0                     St Albans West                 215.57
+# 325700.0          Christchurch Central-West                 215.33
+# 320900.0                       Papanui East                 214.39
+# 318100.0                          Templeton                 212.26
+# 332100.0                          Redcliffs                 204.20
+# 324400.0                    Riccarton South                 197.61
+# 332900.0                    Diamond Harbour                 197.43
+# 330500.0                             Ensors                 196.04
+# 323000.0                           Merivale                 193.00
+# 322100.0                            Malvern                 187.67
+# 322300.0                     Sockburn South                 185.29
+# 327000.0          Christchurch Central-East                 183.41
+# 319400.0                      Papanui North                 182.70
+# 325800.0         Christchurch Central-North                 180.70
+# 327300.0                     Halswell North                 178.97
+
+
+
+# Example output with previous dataset
 # --- sa2 Code Areas Ranked by Mean Price Difference (Descending) ---
 # sa2_code                           sa2_name  mean_price_difference
 #   326600               Christchurch Central                 361.05

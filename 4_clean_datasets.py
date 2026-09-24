@@ -46,6 +46,7 @@ def clean_quarterly_dataset():
 
     df['Number Of Beds'] = df['Number Of Beds'].astype('category')
     df['Dwelling Type'] = df['Dwelling Type'].astype('category')
+    df.rename(columns={'Location Id': 'sa2_code'}, inplace=True)
 
     return df
 

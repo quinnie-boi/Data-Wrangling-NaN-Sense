@@ -17,6 +17,8 @@ Example:
 ######### lolololol
 from calendar import month_name
 
+from numpy._core import float64
+
 from constants import CLEANED_AIRBNB_FILE
 import json
 import multiprocessing as mp
@@ -350,6 +352,7 @@ def main():
     print("Processing all rows...")
 
     df = add_sa2_data(df, api_key)
+    df['sa2_code'] = df['sa2_code'].astype(float64)
 
     output_csv = CLEANED_AIRBNB_FILE.replace(
         ".csv",
@@ -403,7 +406,6 @@ def test_first_500_rows(df, api_key):
 
 if __name__ == "__main__":
     main()
-
     # Test code on 500 rows
     # api_key = sys.argv[1]
     # airbnb = pd.read_csv(CLEANED_AIRBNB_FILE)
