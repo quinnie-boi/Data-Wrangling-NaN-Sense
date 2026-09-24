@@ -1,4 +1,15 @@
 # DATA201/422 Data-Wrangling
+# Deliverable 5
+from start to finish:
+the number in each file indicates the deliverable it relates to
+1. setup_project.py
+2. summary_stats_2.py (optional)
+3. merge_listings_3.py (merges the 9 listing files)
+4. clean_datasets_4.py (cleans both datasets)
+5. add_sa2_codes_v5b.py (adds sa2 codes to cleaned AirBnb dataset)
+6. main_5.py (Performs the other deliverable 5 tasks)
+
+
 # Deliverable 4
 ## Detailed quarterly report, 2020-2026 of rental bond data
 Rental bond data from dwellings rented by private landlords
