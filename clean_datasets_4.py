@@ -87,6 +87,7 @@ def clean_both_datasets():
     # the listings data only goes back to 25-10.
     oldest = max(rental_data["TimeFrame"].min(), airbnb_data["last_review"].min())
     newest = min(rental_data["TimeFrame"].max(), airbnb_data["last_review"].max())
+    oldest = pd.to_datetime("2025-10-01") # Manual override
 
     # quarterly: 2020-01-01 to 2026-04-01
     # listings: 2013-03-03 to 2026-06-22
