@@ -1,5 +1,4 @@
-from constants import UNCLEANED_AIRBNB_FILE, UNCLEANED_BONDS_FILE
-import numpy as np
+from constants import CLEANED_AIRBNB_FILE, CLEANED_BONDS_FILE, UNCLEANED_AIRBNB_FILE, UNCLEANED_BONDS_FILE
 import pandas as pd
 
 def days_since_review(data):
@@ -114,8 +113,10 @@ def clean_both_datasets():
 
     # print(rental_data.describe())
     # print(rental_data.isna().sum())
-    rental_data.to_csv("data/cleaned/rental_bonds.csv")
-    airbnb_data.to_csv("data/cleaned/airbnb_listings.csv")
+    rental_data.to_csv(CLEANED_BONDS_FILE)
+    airbnb_data.to_csv(CLEANED_AIRBNB_FILE)
+    print(f"Successfully saved the cleaned airbnb dataset to {CLEANED_AIRBNB_FILE}")
+    print(f"Successfully saved the cleaned rental bonds dataset to {CLEANED_BONDS_FILE}")
 
 
 
