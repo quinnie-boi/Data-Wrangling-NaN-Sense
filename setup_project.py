@@ -127,9 +127,10 @@ def warn_about_extra_items():
     """
 
     expected_data_items = {
-        "uncleaned_airbnb_listings",
-        "cleaned",
-        "uncleaned_bonds.csv",
+        os.path.basename(UNCLEANED_AIRBNB_DIR),
+        os.path.basename(UNCLEANED_AIRBNB_FILE),
+        os.path.basename(UNCLEANED_BONDS_FILE),
+        os.path.basename(CLEANED_DIR)
     }
 
     if not directory_exists(DATA_DIR):
@@ -141,12 +142,13 @@ def warn_about_extra_items():
         if item not in expected_data_items:
             unexpected_files.append(item)
 
-    print(
-        f"WARNING: Found the following extra item(s) in {DATA_DIR}.\n    ",
-        f"{",\n    ".join(unexpected_files)}\n",
-        "These files may be old, unused, or outdated. Consider renaming them or using the other scripts to generate the datasets from scratch.",
-        sep = ""
-    )
+    if len(unexpected_files) > 0:
+        print(
+            f"WARNING: Found the following extra item(s) in {DATA_DIR}.\n    ",
+            f"{",\n    ".join(unexpected_files)}\n",
+            "These files may be old, unused, or outdated. Consider renaming them or using the other scripts to generate the datasets from scratch.",
+            sep = ""
+        )
 
 
 def validate_project():
