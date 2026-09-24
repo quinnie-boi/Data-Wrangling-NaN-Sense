@@ -40,6 +40,54 @@ def merge_sa2_codes():
 
     airbnb.to_csv(CLEANED_AIRBNB_FILE.replace(".csv", "_sa2.csv"))
 
+def compare_dataset_location_population(filename = CLEANED_MERGED_DATASET_FILE):
+    """
+    print how many airbnb and rental properties are in each location
+    filename: The merged airbnb and rental bonds dataset with sa2.
+    """
+    df = pd.read_csv(filename)
+    #open csv using given filename
+    # with open(df,'r') as property_data:
+    #     # create necescarry dictionaries
+    #     locate_airbnb_dict = {}
+    #     locate_rental_dict = {}
+    #     #loop through all listings and sort locations into different dict keys
+    #     for property_listing in property_data:
+    #         #split listing into list using .strip()
+    #         property_listing = property_listing.strip().split(',')
+    #         if property_listing[2] in locate_airbnb_dict:
+    #             locate_airbnb_dict[property_listing[2]] += 1
+    #         else:
+    #             locate_airbnb_dict[property_listing[2]] = 1
+
+    #         #simplify rental reigons this was added to put all (noth,west,south,east) variants into one location (remove if need be)
+    #         splited_rental =  property_listing[-1].strip().split(' ')
+    #         if splited_rental[-1] in ["North", "East", "South", "West"]:
+    #             splited_rental.pop(-1)
+    #         property_listing[-1] = " ".join(splited_rental)
+    #         #(if needed remove up to here)
+
+    #         if property_listing[-1] in locate_rental_dict:
+    #             locate_rental_dict[property_listing[-1]] += 1
+    #         else:
+    #             locate_rental_dict[property_listing[-1]] = 1
+    # # print out the location dicts:
+    # print("Rental Locations:")
+    # print(locate_rental_dict)
+    # print("Airbnb Locations:")
+    # print(locate_airbnb_dict)
+
+    summary = (
+        df.groupby("sa2_name")
+        .agg(
+            airbnb_listings=("id", "count"),
+            active_bonds=("Active Bonds", "first"),
+            total_bonds=("Total Bonds", "first")
+        )
+        .sort_values("airbnb_listings", ascending=False)
+    )
+
+    print(summary)
 
 
 
@@ -204,13 +252,13 @@ def prasanthi(df):
 
 
 merge_rental_bonds_and_chch_listings()
-prasanthi(pd.read_csv(CLEANED_MERGED_DATASET_FILE))
-
+# prasanthi(pd.read_csv(CLEANED_MERGED_DATASET_FILE))
 
 # Jodi Example to test for week 9 deliverable
 median_price = med_airbnb_price(326600, CLEANED_MERGED_DATASET_FILE)
 print(f"Median Airbnb price for Christchurch Central (SA2: 326600): ${median_price:.2f}")
 
+compare_dataset_location_population(CLEANED_MERGED_DATASET_FILE)
 # Example output
 # sa2_code                           sa2_name  mean_price_difference
 # 317400.0                          Northwood                 512.73
