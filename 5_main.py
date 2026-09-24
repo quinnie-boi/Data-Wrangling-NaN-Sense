@@ -16,6 +16,8 @@ def merge_sa2_codes():
     print(sa2['sa2_code'].summary())
 
     airbnb.to_csv(CLEANED_AIRBNB_FILE.replace(".csv", "_sa2.csv"))
+    
+    
 
 
 def merge_rental_bonds_and_chch_listings():
@@ -41,6 +43,9 @@ def merge_rental_bonds_and_chch_listings():
 
         merged = merged.merge( sa2, on='sa2_code', how="left")
         merged.to_csv(CLEANED_MERGED_DATASET_FILE)
+
+    
+    
 
 
 
