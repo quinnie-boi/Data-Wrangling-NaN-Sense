@@ -201,61 +201,51 @@ def open_quarterly_dataset(path = "data/quarterly_2025_2026.csv"):
         parse_dates=["TimeFrame"]
     )
 
+def compare_dataset_location_population(property_data_filename):
+    """print how many airbnb and rental properties are in each location"""
+    #open csv using given filename
+    with open(property_data_filename,'r') as property_data:
+        # create necescarry dictionaries
+        locate_airbnb_dict = {}
+        locate_rental_dict = {}
+        #loop through all listings and sort locations into different dict keys
+        for property_listing in property_data:
+            #split listing into list using .strip()
+            property_listing = property_listing.strip().split(',')
+            if property_listing[2] in locate_airbnb_dict:
+                locate_airbnb_dict[property_listing[2]] += 1
+            else:
+                locate_airbnb_dict[property_listing[2]] = 1
+
+            #simplify rental reigons this was added to put all (noth,west,south,east) variants into one location (remove if need be)
+            splited_rental =  property_listing[-1].strip().split(' ')
+            if splited_rental[-1] in ["North", "East", "South", "West"]:
+                splited_rental.pop(-1)
+            property_listing[-1] = " ".join(splited_rental)
+            #(if needed remove up to here)
+            
+            if property_listing[-1] in locate_rental_dict:
+                locate_rental_dict[property_listing[-1]] += 1
+            else:
+                locate_rental_dict[property_listing[-1]] = 1
+    # print out the location dicts:
+    print("Rental Locations:")
+    print(locate_rental_dict)
+    print("Airbnb Locations:")
+    print(locate_airbnb_dict)
+        
+           
+    
+           
+        
+   
+
+
+   #Loop through all enteries and 
+
 
 def main():
-    data = open_listings_dataset()
-    # deliverable 4
-    # drop select columns from airbnb dataset
-    data.drop(axis=1, labels=[
-        "Unnamed: 0", # remove the automatic 0 indexed row number.
-        "name",
-        "host_name",
-        "neighbourhood_group",
-        "minimum_nights",
-        "reviews_per_month",
-        "license"
-    ], inplace=True)
-
-    # filter quart-tenancy/bond data to same dates as airbnb
-    quarterly_data = open_quarterly_dataset()
-
-    # Remove NA Values
-    quarterly_data.dropna(
-        subset = ["Median Rent"],
-        inplace=True
-    )
-    # Remove rows where Location Id == -99
-    quarterly_data = quarterly_data[quarterly_data["Location Id"] != -99]
-
-    quarterly_data.replace(to_replace=['5', '6', '7', '8', '9', '15'], value="5+", inplace=True)
-    # print(quarterly_data['Number Of Beds'].value_counts())
-    # print(quarterly_data.dtypes)
-
-    # drop select columns from bond dataset
-    oldest = max(quarterly_data["TimeFrame"].min(), data["last_review"].min())
-    newest = min(quarterly_data["TimeFrame"].max(), data["last_review"].max())
-    # oldest, newest = quarterly_data["TimeFrame"].min(), data["last_review"].max()
-    # print(type(oldest), type(newest))
-    # quarterly: 2020-01-01 to 2026-04-01
-    # listings: 2013-03-03 to 2026-06-22
-
-    # have commented out as it looks like this is for the airbnb data set but uses the rental dataframe - Alex
-    # print(data[data["last_review"] == data["last_review"].min()][["last_review", "host_id", "year"]].describe())
-
-    data = data[data["last_review"].ge(oldest)]
-    data = data[data["last_review"].le(newest)]
-    # doesn't actually change anything atm
-    quarterly_data = quarterly_data[quarterly_data["TimeFrame"].ge(oldest)]
-    quarterly_data = quarterly_data[quarterly_data["TimeFrame"].le(newest)]
-
-    # quarterly_data.drop(axis=1, labels=[
-    #     "Total Bonds",
-    #     "Active Bonds",
-    #     "Closed Bonds"
-    # ], inplace=True)
-
-    # print(quarterly_data.describe())
-    # print(quarterly_data.isna().sum())
+    compare_dataset_location_population("chch_airbnb_bond_with_sa2_names.csv")
 
 
 if __name__ == "__main__":
