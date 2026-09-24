@@ -85,6 +85,7 @@ def compare_dataset_location_population(filename = CLEANED_MERGED_DATASET_FILE):
             total_bonds=("Total Bonds", "first")
         )
         .sort_values("airbnb_listings", ascending=False)
+        .head()
     )
 
     print(summary)
@@ -252,12 +253,15 @@ def prasanthi(df):
 
 
 merge_rental_bonds_and_chch_listings()
-# prasanthi(pd.read_csv(CLEANED_MERGED_DATASET_FILE))
+prasanthi(pd.read_csv(CLEANED_MERGED_DATASET_FILE))
 
 # Jodi Example to test for week 9 deliverable
 median_price = med_airbnb_price(326600, CLEANED_MERGED_DATASET_FILE)
-print(f"Median Airbnb price for Christchurch Central (SA2: 326600): ${median_price:.2f}")
+print('#'*10, 'Median Price', '#'*10)
+print(f"Median Airbnb price for Christchurch Central (SA2: 326600): ${median_price:.2f}\n\n")
 
+
+print('#'*10, 'Compare airbnb listings and rental bonds', '#'*10)
 compare_dataset_location_population(CLEANED_MERGED_DATASET_FILE)
 # Example output
 # sa2_code                           sa2_name  mean_price_difference
