@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from matplotlib.patches import Patch
-from  import cleaned_airbnb_dataset, open_airbnb_dataset
+from clean_datasets_4 import cleaned_airbnb_dataset, open_airbnb_dataset
 
 def plot_hist(values, title):
     """plot the prices in a histogram"""
