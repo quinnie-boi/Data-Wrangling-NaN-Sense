@@ -1,3 +1,4 @@
+from constants import UNCLEANED_AIRBNB_FILE, UNCLEANED_BONDS_FILE
 import numpy as np
 import pandas as pd
 
@@ -13,13 +14,13 @@ def days_since_review(data):
         pd.to_datetime(latest_review,format="%Y-%m-%d") - data["last_review"]
     ).dt.days
 
-def open_airbnb_dataset(path = "data/listings_25-10_26-06.csv"):
+def open_airbnb_dataset(path = UNCLEANED_AIRBNB_FILE):
     return pd.read_csv(path,
         parse_dates=["last_review"],
         index_col=0 # use id as the index column
     )
 
-def open_quarterly_dataset(path = "data/quarterly_2025_2026.csv"):
+def open_quarterly_dataset(path = UNCLEANED_BONDS_FILE):
     return pd.read_csv(path,
         parse_dates=["TimeFrame"]
     )

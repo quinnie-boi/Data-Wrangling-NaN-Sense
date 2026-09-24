@@ -5,6 +5,7 @@ Imports the nine airbnb listing dataset csv files from a folder and
 merges them into one larger dataset which is saved to disk.
 """
 
+from constants import *
 import os
 import pandas as pd
 
@@ -40,7 +41,7 @@ def data_collection_date(data_file_name):
             nine listing files are in the data_source directory and ensure they following the\
             correct naming scheme defined in the README and read_data.")
 
-def read_data(source_dir="data/raw"):
+def read_data(source_dir=UNCLEANED_AIRBNB_DIR):
     """
     name format should be: "listings-yy-mm.csv"
     where yy-mm is the date the data was scraped.
@@ -66,20 +67,10 @@ def read_data(source_dir="data/raw"):
     # combines the list of datasets into one pandas data frame
     return merged_data
 
-def bounding_dates(source_dir = "data/raw"):
-    dates = []
-    for name in file_names_in(source_dir):
-        year, month = data_collection_date(name)
-        dates.append('-'.join([str(year), f"{month:02d}"]))
-
-    return [min(dates), max(dates)]
-
 def main():
     data = read_data()
-    date_range = bounding_dates()
-    outpath = f"data/listings_{"_".join(date_range)}.csv"
-    data.to_csv(outpath)
-    print(f"Successfully saved the merged csvs to {outpath}")
+    data.to_csv(UNCLEANED_AIRBNB_FILE)
+    print(f"Successfully saved the merged csvs to {UNCLEANED_AIRBNB_FILE}")
 
 if __name__ == "__main__":
     main()
