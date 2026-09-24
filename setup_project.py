@@ -150,6 +150,21 @@ def warn_about_extra_items():
             sep = ""
         )
 
+    unexpected_files = []
+    expected_data_items = EXPECTED_ROOT_FILES
+
+    for item in os.listdir("."):
+        if item not in expected_data_items:
+            unexpected_files.append(item)
+
+    if len(unexpected_files) > 0:
+        print(
+            f"\nWARNING: Found the following extra item(s) in the project root.\n    ",
+            f"{",\n    ".join(unexpected_files)}\n",
+            "this isn't necessarily a problem, you might just have some extra junk lying around ;)",
+            sep = ""
+        )
+
 
 def validate_project():
     """Run all project validation checks."""
