@@ -1,4 +1,15 @@
 # DATA201/422 Data-Wrangling
+# Deliverable 5
+
+## Located Stats NZ dataset containing the area codes on Koordinates. Layer ID: "98970"
+## Queried the API for the latitude/longitude pairs in the AirBnB dataset to obtain the area codes matching the bond dataset.
+## Created an additional column in your AirBnB dataset to store the corresponding area codes. Saved as "chch_airbnb_bond_with_sa2".
+## Joined together both datasets on the area code and time. Chose "_______" type of join.
+## The median AirBnB price in Christchurch Central (Location ID) is $239.
+## "_________" of Christchurch resulted in the craziest (largest) gap between short- and long-term rental prices.
+## There are "______" AirBnBs and "______" rental properties in each location.
+
+
 # Deliverable 4
 > [!WARNING]
 > Please move the downloaded csv listings into /data/raw. This will keep them separate from the combined and cleaned
