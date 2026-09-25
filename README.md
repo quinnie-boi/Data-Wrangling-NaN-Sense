@@ -3,20 +3,29 @@
 
 Located Stats NZ dataset containing the area codes on Koordinates. Layer ID: "98970"
 
-Queried the API for the latitude/longitude pairs in the AirBnB dataset to obtain the area codes matching the bond dataset.
+Queried the API for the latitude/longitude pairs in the AirBnB dataset to obtain the area codes matching the bond dataset
 
-Created an additional column in your AirBnB dataset to store the corresponding area codes. Saved as "chch_airbnb_bond_with_sa2".
+Created an additional column in your AirBnB dataset to store the corresponding area codes. Saved as "chch_airbnb_bond_with_sa2.csv"
 
-## Joined together both datasets on the area code and time. Chose "_______" type of join.
+Joined datasets on the area code and time using column-join type of join method
 
-The median AirBnB price in Christchurch Central (Location ID) is $239.
+The median AirBnB price in Christchurch Central (SA2: 326600) is $234.00
 
-Location id: 316800.0  Clearwater 447.36 of Christchurch resulted in the craziest (largest) gap between short- and long-term rental prices.
+Location_id: 316800 Clearwater 447.36 of Christchurch resulted in the craziest (largest) gap between short- and long-term rental prices
 
-## There are "______" AirBnBs and "______" rental properties in each location.
+The following table is a summary of the number of AirBnBs compared to number of rental properties by grouped location:
+                           
+                           airbnb_listings  active_bonds  total_bonds
+sa2_name
+|-----------------------------------------------------------------------|
+Christchurch Central-East             65941         444.0        114.0
+Christchurch Central-South            29328          93.0         33.0
+Christchurch Central-North            28379         501.0         75.0
+Christchurch Central-West             14700         180.0         36.0
+Linwood West                           9988         549.0        102.0
 
-## Running deliverable 5 youself
-note: the number in each file indicates the deliverable it relates to.
+## Running Deliverable 5
+Note: the number in each file indicates the deliverable it relates to.
 
 Running from start to finish:
 
