@@ -11,7 +11,7 @@ Created an additional column in your AirBnB dataset to store the corresponding a
 
 The median AirBnB price in Christchurch Central (Location ID) is $239.
 
-Location id: 1097487 (Fendalton Ward) of Christchurch resulted in the craziest (largest) gap between short- and long-term rental prices.
+Location id: 316800.0  Clearwater 447.36 of Christchurch resulted in the craziest (largest) gap between short- and long-term rental prices.
 
 ## There are "______" AirBnBs and "______" rental properties in each location.
 
