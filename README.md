@@ -15,9 +15,8 @@ Location_id: 316800 Clearwater 447.36 of Christchurch resulted in the craziest (
 
 The following table is a summary of the number of AirBnBs compared to number of rental properties by grouped location:
                            
-                           airbnb_listings  active_bonds  total_bonds
-sa2_name
-|-----------------------------------------------------------------------|
+sa2_name airbnb_listings  active_bonds  total_bonds
+|----------------------------------------------------|
 Christchurch Central-East             65941         444.0        114.0
 Christchurch Central-South            29328          93.0         33.0
 Christchurch Central-North            28379         501.0         75.0
