@@ -1,11 +1,12 @@
 # DATA201/422 Data-Wrangling
 # Deliverable 6
-In Week 9, you learned about best coding practices. Please take a moment to revisit your code and assess whether you should change something to better adhere to the coding practices.
+In Week 9, you learned about best coding practices. Please take a moment to revisit your code and assess whether you 
+should change something to better adhere to the coding practices.
 Keep notes of everything you are changing (on a higher level, not line-by-line) and why.
 
 What we changed from Deliverable 5 to Deliverable 6:
 - Functions moved from `main_5.py` to their own separate files with descriptive names
-- data inputs renamed and sorted into `cleaned` and `uncleaned_airbnb_listings` folders
+- Data inputs renamed and sorted into `cleaned` and `uncleaned_airbnb_listings` folders
 - 
 
 
