@@ -1,17 +1,49 @@
 # DATA201/422 Data-Wrangling
 # Deliverable 6
-In Week 9, you learned about best coding practices. Please take a moment to revisit your code and assess whether you 
-should change something to better adhere to the coding practices.
-Keep notes of everything you are changing (on a higher level, not line-by-line) and why.
+We revisited our code to assess adherence to best coding practices.
+Our major changes from Deliverable 5 to Deliverable 6 are as follows:
 
-What we changed from Deliverable 5 to Deliverable 6:
-- Functions moved from `main_5.py` to their own separate files with descriptive names
-- Data inputs renamed and sorted into `cleaned` and `uncleaned_airbnb_listings` folders
-- 
+1. Updated code structure for clean separation of parts:
+Data
+├── main_5.py
+│	 #inputs
+├── uncleaned_airbnb_listings
+│   
+│   ├── listings-25-10.csv
+│   ├── listings-25-11.csv
+│   ├── listings-25-12.csv
+│   ├── listings-26-01.csv
+│   ├── listings-26-02.csv
+│   ├── listings-26-03.csv
+│   ├── listings-26-04.csv
+│   ├── listings-26-05.csv
+│   └── listings-26-06.csv
+│   
+├── uncleaned_airbnb_listings.csv 
+└── uncleaned_bonds.csv
+│
+├── functions
+│   #code
+│   ├── add_sa2_codes.py
+│   ├── clean_datasets.py
+│   ├── constants.py
+│   ├── merge_listings.py
+│   ├── setup_project.py
+│   ├── summary_statistics.py
+│
+├── wrangled_data_and_analyses
+│   #output 
+│   ├── chch_airbnb_listings.csv
+│   ├── chch_airbnb_listings_with_sa2.csv
+│   ├── merged_listings_and_bonds.csv
+│   └── tenancy_bonds.csv
+
+2. Moved functions from `main_5.py` to their own separate files (small pieces) with descriptive names to improve organisation and orchestration;
+3. Renamed data inputs and sorted into `cleaned` and `uncleaned_airbnb_listings` folders; and,
+4. Collected relative file paths and described in constants to ensure they are all static and not absolute (makes constants reusable and easier to fix.
 
 
 # Deliverable 5
-
 Located Stats NZ dataset containing the area codes on Koordinates. Layer ID: "98970"
 
 Queried the API for the latitude/longitude pairs in the AirBnB dataset to obtain the area codes matching the bond dataset
