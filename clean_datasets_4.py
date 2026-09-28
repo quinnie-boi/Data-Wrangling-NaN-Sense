@@ -1,5 +1,7 @@
 from constants import CLEANED_AIRBNB_FILE, CLEANED_BONDS_FILE, UNCLEANED_AIRBNB_FILE, UNCLEANED_BONDS_FILE
 import pandas as pd
+from pathlib import Path
+import os
 
 # month year column code to be added here
 
@@ -109,12 +111,17 @@ def clean_quarterly_dataset():
     # Remove rows where Location Id == -99
     df = df[df["Location Id"] != -99]
 
-    # standardise Number Of Beds column
-    df['Number Of Beds'] = df['Number Of Beds'].replace(to_replace=['5', '6', '7', '8', '9', '15'], value="5+")
+    # standardise Number Of Beds column <- do not need this if ALL & ALL is the aggrogate data
+    # df['Number Of Beds'] = df['Number Of Beds'].replace(to_replace=['5', '6', '7', '8', '9', '15'], value="5+")
 
     df['Number Of Beds'] = df['Number Of Beds'].astype('category')
     df['Dwelling Type'] = df['Dwelling Type'].astype('category')
     df.rename(columns={'Location Id': 'sa2_code'}, inplace=True)
+
+    df = df[
+        (df["Dwelling Type"] == "ALL") &
+        (df["Number Of Beds"] == "ALL")
+        ].copy()
 
     return df
 
@@ -144,50 +151,81 @@ def cleaned_airbnb_dataset():
     return df
 
 
+from pathlib import Path
+import os
+import pandas as pd
+
+
 def clean_both_datasets():
     """
-
+    Clean both datasets and restrict them to a common date range.
     """
     rental_bonds_data = clean_quarterly_dataset()
     airbnb_data = cleaned_airbnb_dataset()
 
-    # TODO The oldest date is 2020-01-01 which is IMPOSSIBLE given
-    # the listings data only goes back to 25-10.
-    oldest = max(rental_bonds_data["TimeFrame"].min(), airbnb_data["last_review"].min())
-    newest = min(rental_bonds_data["TimeFrame"].max(), airbnb_data["last_review"].max())
-    oldest = pd.to_datetime("2025-10-01") # Manual override
+    # Ensure date columns are datetime
+    rental_bonds_data["TimeFrame"] = pd.to_datetime(
+        rental_bonds_data["TimeFrame"]
+    )
+    airbnb_data["last_review"] = pd.to_datetime(
+        airbnb_data["last_review"]
+    )
 
-    # drop select columns from bond dataset
-    oldest = max(rental_bonds_data["TimeFrame"].min(), airbnb_data["last_review"].min())
-    newest = min(rental_bonds_data["TimeFrame"].max(), airbnb_data["last_review"].max())
+    # Determine latest date available in both datasets
+    newest = min(
+        rental_bonds_data["TimeFrame"].max(),
+        airbnb_data["last_review"].max()
+    )
 
-    # quarterly: 2020-01-01 to 2026-04-01
-    # listings: 2013-03-03 to 2026-06-22
+    # Airbnb listing data is only valid from October 2025 onwards
+    oldest = pd.to_datetime("2025-10-01")
 
-    airbnb_data = airbnb_data[airbnb_data["last_review"].ge(oldest)]
-    airbnb_data = airbnb_data[airbnb_data["last_review"].le(newest)]
+    # Filter Airbnb data
+    airbnb_data = airbnb_data[
+        airbnb_data["last_review"].between(oldest, newest)
+    ].copy()
 
-    # doesn't actually change anything atm
-    rental_bonds_data = rental_bonds_data[rental_bonds_data["TimeFrame"].ge(oldest)]
-    rental_bonds_data = rental_bonds_data[rental_bonds_data["TimeFrame"].le(newest)]
+    # Filter rental bond data
+    rental_bonds_data = rental_bonds_data[
+        rental_bonds_data["TimeFrame"].between(oldest, newest)
+    ].copy()
 
-    print(f"data combined from {oldest} to {newest}")
-    # print(rental_bonds_data['Number Of Beds'].value_counts())
+    print(f"Data combined from {oldest.date()} to {newest.date()}")
 
-    # Check that the categories are correct
-    # print(quarterly_data['Number Of Beds'].cat.categories.tolist())
-    # print(quarterly_data['Dwelling Type'].cat.categories.tolist())
+    # remove 'ALL' from `Dwelling Type` and `Number of Beds`
 
-    # Check that the datatypes of each column are correct
-    # print(airbnb_data.dtypes)
-    # print(rental_data.dtypes)
 
-    # print(rental_data.describe())
-    # print(rental_data.isna().sum())
-    rental_bonds_data.to_csv(CLEANED_BONDS_FILE)
-    airbnb_data.to_csv(CLEANED_AIRBNB_FILE)
-    print(f"Successfully saved the cleaned airbnb dataset to {CLEANED_AIRBNB_FILE}")
-    print(f"Successfully saved the cleaned rental bonds dataset to {CLEANED_BONDS_FILE}")
+    # Save the main cleaned datasets
+    rental_bonds_data.to_csv(CLEANED_BONDS_FILE, index=False)
+    airbnb_data.to_csv(CLEANED_AIRBNB_FILE, index=False)
+
+    # Create a copy of the cleaned rental data
+    cleaned_rentals = rental_bonds_data.copy()
+
+    # Make sure the outputs folder exists
+    os.makedirs("outputs", exist_ok=True)
+
+    # Write the copy to outputs folder
+    cleaned_rentals.to_csv(
+        "outputs/cleaned_rentals.csv",
+        index=False
+    )
+
+    # Also save a copy to Downloads
+    output_file = Path.home() / "Downloads" / "cleaned_rentals.csv"
+    cleaned_rentals.to_csv(output_file, index=False)
+
+    print(f"Cleaned data saved to: {output_file}")
+    print(
+        f"Successfully saved the cleaned Airbnb dataset to "
+        f"{CLEANED_AIRBNB_FILE}"
+    )
+    print(
+        f"Successfully saved the cleaned rental bonds dataset to "
+        f"{CLEANED_BONDS_FILE}"
+    )
+
+    return cleaned_rentals, airbnb_data
 
 
 
