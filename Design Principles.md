@@ -146,3 +146,5 @@ Firstly, we would follow the coding practice of separating our pipeline into dif
 Currently, we have our data folder set up to better sort out our cleaned and uncleaned data and to separate it from the rest of our pipeline files. However, the code and the output folders are still yet to be implemented (implemented for automation deliverable).
 
 Secondly, we would have differently named output files; this will allow the output to be separated via the different output types allowing for easier comprehension of the results. Especially when multiple outputs are given at once.
+
+Numeric order for analysis files (0, 1, 2, 3, 4) in order that we want them to be run (if unautomated!)
