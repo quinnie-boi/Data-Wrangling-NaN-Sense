@@ -1,6 +1,6 @@
 import pandas as pd
 import os
-from constants import AIRBNB_FILE_NAME, CLEANED_AIRBNB_FILE, CLEANED_BONDS_FILE, CLEANED_DIR, CLEANED_MERGED_DATASET_FILE
+from constants import CLEANED_AIRBNB_FILE, CLEANED_BONDS_FILE, CLEANED_MERGED_DATASET_FILE, JODI_SA2, CLEANED_AIRBNB_SA2_FILE
 
 def med_airbnb_price(location_id, filename):
     """Returns the median Airbnb price in a dataset for a given location,
@@ -106,9 +106,7 @@ def merge_rental_bonds_and_chch_listings():
         return
 
     # Read the datasets
-    airbnb = pd.read_csv(
-        CLEANED_AIRBNB_FILE.replace(".csv", "_with_sa2.csv"),
-    )
+    airbnb = pd.read_csv(CLEANED_AIRBNB_SA2_FILE)
 
     bond = pd.read_csv(CLEANED_BONDS_FILE)
 
@@ -252,11 +250,14 @@ def prasanthi(df):
     print(mean_differences_sorted.head().to_string(index=False))
 
 
-merge_rental_bonds_and_chch_listings()
-prasanthi(pd.read_csv(CLEANED_MERGED_DATASET_FILE))
+# merge_rental_bonds_and_chch_listings()
+# prasanthi(pd.read_csv(CLEANED_MERGED_DATASET_FILE))
 
 # Jodi Example to test for week 9 deliverable
-median_price = med_airbnb_price(326600, CLEANED_MERGED_DATASET_FILE)
+median_price = med_airbnb_price(
+    326600,
+    JODI_SA2
+)
 print('#'*10, 'Median Price', '#'*10)
 print(f"Median Airbnb price for Christchurch Central (SA2: 326600): ${median_price:.2f}\n\n")
 

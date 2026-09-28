@@ -151,7 +151,6 @@ There is a helpful document included called `using_git.md` which gives a brief o
 # Project Setup
 
 Before running the project, make sure the following folders exist:
- 
 ```
 data/
 data/uncleaned_airbnb_listings/

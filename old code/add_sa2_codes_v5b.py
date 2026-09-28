@@ -15,7 +15,6 @@ Example:
 
 
 ######### lolololol
-from calendar import month_name
 
 from numpy._core import float64
 
@@ -321,8 +320,6 @@ def main():
     """
     Load the dataset, obtain SA2 codes, and save the result.
     """
-
-
     if len(sys.argv) != 2:
         print(
             "Usage: python add_sa2_codes.py API_KEY"

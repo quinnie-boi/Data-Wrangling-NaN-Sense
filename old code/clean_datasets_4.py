@@ -1,6 +1,4 @@
 from constants import CLEANED_AIRBNB_FILE, CLEANED_BONDS_FILE, UNCLEANED_AIRBNB_FILE, UNCLEANED_BONDS_FILE
-import pandas as pd
-from pathlib import Path
 import os
 
 # month year column code to be added here
@@ -17,7 +15,6 @@ def read_data(data_source="data/raw"):
 
     data_path: the relative path to where the csv files are stored
     """
-    import os
 
     # Automatically finds all files containing "listings" in the name
     pattern = "listings"
@@ -125,37 +122,6 @@ def clean_quarterly_dataset():
 
     return df
 
-def cleaned_airbnb_dataset():
-    df = open_airbnb_dataset()
-    df = df[df["neighbourhood_group"] == "Christchurch City"].copy()
-
-    # drop select columns from airbnb dataset
-    df.drop(axis=1, labels=[
-        "name",
-        "host_name",
-        "neighbourhood_group", # they are all in Christchurch City
-        "minimum_nights",
-        "reviews_per_month",
-        "license"
-    ], inplace=True)
-
-    # Adds a new column in-place
-    df["days_since_last_review"] = days_since_review(df)
-
-    # Coerce columns into category datatype,
-    # automatically generated based on existing values.
-    for category in ['neighbourhood', 'room_type']:
-        df[category] = df[category].astype('category')
-
-
-    return df
-
-
-from pathlib import Path
-import os
-import pandas as pd
-
-
 def clean_both_datasets():
     """
     Clean both datasets and restrict them to a common date range.
@@ -202,12 +168,12 @@ def clean_both_datasets():
     # Create a copy of the cleaned rental data
     cleaned_rentals = rental_bonds_data.copy()
 
-    # Make sure the outputs folder exists
-    os.makedirs("outputs", exist_ok=True)
+    # Make sure the out folder exists
+    os.makedirs("../out", exist_ok=True)
 
-    # Write the copy to outputs folder
+    # Write the copy to out folder
     cleaned_rentals.to_csv(
-        "outputs/cleaned_rentals.csv",
+        "out/cleaned_rentals.csv",
         index=False
     )
 
