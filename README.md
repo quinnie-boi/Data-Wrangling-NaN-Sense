@@ -4,6 +4,7 @@ We revisited our code to assess adherence to best coding practices.
 Our major changes from Deliverable 5 to Deliverable 6 are as follows:
 
 1. Updated code structure for clean separation of parts:
+``` 
 Data
 ├── main_5.py
 │	 #inputs
@@ -37,10 +38,10 @@ Data
 │   ├── chch_airbnb_listings_with_sa2.csv
 │   ├── merged_listings_and_bonds.csv
 │   └── tenancy_bonds.csv
-
-2. Moved functions from `main_5.py` to their own separate files (small pieces) with descriptive names to improve organisation and orchestration;
-3. Renamed data inputs and sorted into `cleaned` and `uncleaned_airbnb_listings` folders; and,
-4. Collected relative file paths and described in constants to ensure they are all static and not absolute (makes constants reusable and easier to fix.
+```
+3. Moved functions from `main_5.py` to their own separate files (small pieces) with descriptive names to improve organisation and orchestration;
+4. Renamed data inputs and sorted into `cleaned` and `uncleaned_airbnb_listings` folders; and,
+5. Collected relative file paths and described in constants to ensure they are all static and not absolute (makes constants reusable and easier to fix.
 
 
 # Deliverable 5
