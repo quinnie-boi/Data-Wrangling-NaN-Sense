@@ -15,13 +15,18 @@ For Deliverable 7, we worked on automating our data-wrangling process. The main 
 #### What we did
 
 - Added the July and August 2026 New Zealand Airbnb datasets.
-- Created a `Makefile` to run the different parts of our data-wrangling process automatically.
-- Changed the code so that it can find and process new monthly Airbnb files instead of expecting a fixed number of files.
-- Updated the cleaning process so it uses the month and year of each Airbnb dataset instead of a fixed date.
-- Improved the SA2 process so we can reuse SA2 information we already have and only look up new coordinates when needed.
-- Stored the API key as an environment variable instead of writing it directly in the code.
-- Updated the Airbnb and Rental Bond join to use both SA2 area and quarter. This helps avoid duplicate matches and makes sure we are comparing the same area and time period.
-- Updated the plots so they are automatically saved in the `out` folder.
+
+- Created a `Makefile` to connect the different steps in our data-wrangling pipeline. This means we can run the pipeline with one command instead of running each Python file separately.
+
+- Removed the fixed file-number check. Before, the project expected exactly nine monthly files, which would cause problems when we added new months. Now, new monthly files can be added without changing the expected number each time.
+
+- Removed the fixed June date and changed the cleaning process to use the month and year of each Airbnb dataset. This means July, August, and future monthly data can be processed without manually changing the date in the code.
+
+- Reused the SA2 information we already had and only looked up coordinates that were new. This avoids looking up the same coordinates again.
+
+- Changed the Airbnb and Rental Bond join from using only SA2 to using both SA2 and quarter. Using only SA2 was creating duplicate matches because the same area had Rental Bond records from different time periods. Using SA2 and quarter lets us match the same area and time period.
+
+- Updated the plotting code so the plots are automatically saved in the `out` folder when the pipeline runs.
 
 #### Running the pipeline
 
@@ -48,8 +53,9 @@ Run the analysis
         ↓
 Create the updated plots
 ```
-
 The final plots are saved in the `out` folder.
+
+
 
 # Deliverable 6
 We revisited our code to assess adherence to best coding practices.
