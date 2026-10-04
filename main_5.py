@@ -100,10 +100,6 @@ def merge_rental_bonds_and_chch_listings():
     # Written by Syamily :)
     # Tweaked by Quinn
 
-    if os.path.exists(CLEANED_MERGED_DATASET_FILE):
-        print('#'*10, 'INFO', '#'*10)
-        print(f"Skipped merging files {CLEANED_MERGED_DATASET_FILE} already exists.\n\n")
-        return
 
     # Read the datasets
     airbnb = pd.read_csv(
@@ -138,8 +134,17 @@ def merge_rental_bonds_and_chch_listings():
     #     .to_string(index=False)
     # )
 
-    # Prepare the Rental Bond columns for joining
-    bond["quarter"] = pd.to_datetime(bond["TimeFrame"])
+    # Prepare Rental Bond data for joining.
+    # Use the overall rental statistics rather than separate
+    # dwelling-type and bedroom categories.
+    bond = bond[
+        (bond["Dwelling Type"] == "ALL")
+        & (bond["Number Of Beds"] == "ALL")
+        ].copy()
+
+    # Convert the Rental Bond date to the same quarterly format
+    # used by the Airbnb data.
+    bond["quarter"] = pd.to_datetime(bond["TimeFrame"]).dt.to_period("Q")
 
     # Make sure both datasets use the same area-code format
     if bond['sa2_code'].dtype !=  airbnb['sa2_code'].dtype:
@@ -165,8 +170,9 @@ def merge_rental_bonds_and_chch_listings():
     # )
     joined = airbnb.merge(
         bond,
-        on='sa2_code',
-        how='left',
+        on=["sa2_code", "quarter"],
+        how="left",
+        validate="many_to_one",
         indicator=True
     )
 

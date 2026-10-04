@@ -105,11 +105,6 @@ def check_required_files():
         if f.lower().endswith(".csv")
     ]
 
-    if len(csv_files) != EXPECTED_AIRBNB_FILE_COUNT:
-        problems.append(
-            f"Expected {EXPECTED_AIRBNB_FILE_COUNT} Airbnb CSV files "
-            f"but found {len(csv_files)}"
-        )
 
     for filename in csv_files:
         if not is_valid_airbnb_filename(filename):

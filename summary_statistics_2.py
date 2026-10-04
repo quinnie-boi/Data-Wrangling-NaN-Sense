@@ -4,7 +4,7 @@ Created for Deliverable 3
 Creates summary statistics for the airbnb data for both New Zealand and
 Christchurch. Produces four figures and prints information to console.
 """
-
+import os
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -45,7 +45,7 @@ def plot_day_hist(day_values):
     plt.figure(figsize=(8, 6))
     axes = plt.axes()
     axes.hist(days, edgecolor="orchid", color="thistle", bins=np.linspace(0, 3000, 31))
-    axes.set_title("Days since last review (CHCH, 19 June 2026)")
+    axes.set_title("Days since last review in Christchurch")
     axes.set_xlabel("Days")
     axes.set_ylabel("Count")
 
@@ -97,26 +97,29 @@ def plot_rev_hist(rev_values):
     axes.legend(handles=legend_elements, title="Review count")
 
 def main():
+    output_dir = "out"
+    os.makedirs(output_dir, exist_ok=True)
     data = open_airbnb_dataset()
     chch_data = cleaned_airbnb_dataset()    # summary stats to go here
 
     # plot nz nightly price data
     nz_title = "Price density of AirBnBs in New Zealand"
     plot_hist(data, nz_title)
+    plt.savefig(os.path.join(output_dir, "nz_airbnb_price.png"), bbox_inches="tight")
     # plot chch price data
     chch_title = "Price density of AirBnBs in Christchurch"
     plot_hist(chch_data, chch_title)  # using max price of $1500
-
+    plt.savefig(os.path.join(output_dir, "chch_airbnb_price.png"), bbox_inches="tight")
     # check str to date conversion worked
     print(chch_data["last_review"].dtype)
     # calculate days since last review
-    days_since_review(chch_data)
+    #days_since_review(chch_data)
     # call days since last review hist
     plot_day_hist(chch_data)
-
+    plt.savefig(os.path.join(output_dir, "chch_days_since_review.png"), bbox_inches="tight")
     # plot hist of number of reviews for chch
     plot_rev_hist(chch_data)
-
+    plt.savefig(os.path.join(output_dir, "chch_number_of_reviews.png"), bbox_inches="tight")
     chch_90 = np.quantile(chch_data["number_of_reviews"], 0.9)
     nz_90 = np.quantile(data["number_of_reviews"], 0.9)
     print(

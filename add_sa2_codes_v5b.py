@@ -27,6 +27,7 @@ import urllib.parse
 import urllib.request
 
 import pandas as pd
+import os
 
 LAYER_ID = 98970
 OUTPUT_COLUMN = "SA22019"
@@ -170,7 +171,7 @@ def test_query(latitude, longitude, api_key):
     )
 
     print(f"Querying: ({latitude}, {longitude})")
-    print(f"URL: {url}")
+    #print(f"URL: {url}")
 
     try:
         with urllib.request.urlopen(url, timeout=30) as response:
@@ -193,7 +194,8 @@ def test_query(latitude, longitude, api_key):
 
         properties = feature.get("properties", {})
 
-        sa2_name = properties.get("SA22019_V1_NAME")
+
+        sa2_name = properties.get("SA22019_V1_00_NAME")
         sa2_code = properties.get("SA22019_V1_00")
 
         print(f"\nSA2 Name: {sa2_name}")
@@ -287,26 +289,97 @@ def test_single_query(df, api_key):
 
 def add_sa2_data(df, api_key):
     """
-    Query SA2 names and codes for all rows.
+    Reuse existing SA2 results and query the API only for new coordinates.
     """
 
-    tasks = [
-        (
-            row.latitude,
-            row.longitude,
-            api_key,
+    output_csv = CLEANED_AIRBNB_FILE.replace(
+        ".csv",
+        "_with_sa2.csv",
+    )
+
+    # Load SA2 results that were already calculated.
+    try:
+        old_data = pd.read_csv(output_csv)
+
+        lookup = (
+            old_data[
+                ["latitude", "longitude", SA2_NAME_COLUMN, SA2_CODE_COLUMN]
+            ]
+            .dropna(subset=[SA2_CODE_COLUMN])
+            .drop_duplicates(subset=["latitude", "longitude"])
         )
-        for row in df.itertuples(index=False)
-    ]
 
-    worker_count = max(1, mp.cpu_count() - 1)
+        print(f"Loaded {len(lookup)} existing SA2 coordinate mappings.")
 
-    with mp.Pool(worker_count) as pool:
-        results = pool.map(query_sa2, tasks)
+    except FileNotFoundError:
+        lookup = pd.DataFrame(
+            columns=[
+                "latitude",
+                "longitude",
+                SA2_NAME_COLUMN,
+                SA2_CODE_COLUMN,
+            ]
+        )
 
-    df[[SA2_NAME_COLUMN, SA2_CODE_COLUMN]] = pd.DataFrame(
-        results,
-        index=df.index,
+        print("No existing SA2 file found. Starting with an empty lookup.")
+
+    # Work with unique coordinates only.
+    coordinates = (
+        df[["latitude", "longitude"]]
+        .drop_duplicates()
+        .copy()
+    )
+
+    # Reuse SA2 results that we already know.
+    coordinates = coordinates.merge(
+        lookup,
+        on=["latitude", "longitude"],
+        how="left",
+    )
+
+    # Find coordinates that still need an API query.
+    missing = coordinates[
+        coordinates[SA2_CODE_COLUMN].isna()
+    ].copy()
+
+    print(f"Unique coordinates: {len(coordinates)}")
+    print(f"Coordinates already known: {len(coordinates) - len(missing)}")
+    print(f"New coordinates to query: {len(missing)}")
+
+    # Query only new coordinates.
+    if not missing.empty:
+        tasks = [
+            (
+                row.latitude,
+                row.longitude,
+                api_key,
+            )
+            for row in missing.itertuples(index=False)
+        ]
+
+        worker_count = max(1, mp.cpu_count() - 1)
+
+        with mp.Pool(worker_count) as pool:
+            results = pool.map(query_sa2, tasks)
+
+        missing[[SA2_NAME_COLUMN, SA2_CODE_COLUMN]] = pd.DataFrame(
+            results,
+            index=missing.index,
+        )
+
+        # Add the newly found results back into the lookup.
+        coordinates.loc[
+            missing.index,
+            [SA2_NAME_COLUMN, SA2_CODE_COLUMN]
+        ] = missing[
+            [SA2_NAME_COLUMN, SA2_CODE_COLUMN]
+        ]
+
+    # Attach SA2 information to every Airbnb row.
+    df = df.merge(
+        coordinates,
+        on=["latitude", "longitude"],
+        how="left",
     )
 
     missing_count = df[SA2_CODE_COLUMN].isna().sum()
@@ -322,14 +395,11 @@ def main():
     Load the dataset, obtain SA2 codes, and save the result.
     """
 
+    api_key = os.getenv("API_KEY")
 
-    if len(sys.argv) != 2:
-        print(
-            "Usage: python add_sa2_codes.py API_KEY"
-        )
+    if not api_key:
+        print("API_KEY environment variable is not set.")
         sys.exit(1)
-
-    api_key = sys.argv[1]
 
     df = pd.read_csv(CLEANED_AIRBNB_FILE)
 
