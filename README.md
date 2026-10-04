@@ -8,6 +8,49 @@ Add the new months to your previous analyses and obtain updated plots.
 Important: This is not about doing everything again. You are expected to automate and orchestrate your code, so updating your results should be just one command!
 
 
+### Our Work for Deliverable 7
+
+For Deliverable 7, we worked on automating our data-wrangling process. The main idea was to make it easier to add new Airbnb data and update our results without running every Python file separately.
+
+#### What we did
+
+- Added the July and August 2026 New Zealand Airbnb datasets.
+- Created a `Makefile` to run the different parts of our data-wrangling process automatically.
+- Changed the code so that it can find and process new monthly Airbnb files instead of expecting a fixed number of files.
+- Updated the cleaning process so it uses the month and year of each Airbnb dataset instead of a fixed date.
+- Improved the SA2 process so we can reuse SA2 information we already have and only look up new coordinates when needed.
+- Stored the API key as an environment variable instead of writing it directly in the code.
+- Updated the Airbnb and Rental Bond join to use both SA2 area and quarter. This helps avoid duplicate matches and makes sure we are comparing the same area and time period.
+- Updated the plots so they are automatically saved in the `out` folder.
+
+#### Running the pipeline
+
+We can now use Make to run the pipeline. Make checks what has changed and only runs the steps that need to be updated.
+
+To run the full pipeline again, we can use:
+
+```bash
+make rebuild
+```
+
+This runs the steps in the following order:
+
+```text
+Merge the monthly Airbnb data
+        ↓
+Clean the data
+        ↓
+Add SA2 information
+        ↓
+Join the Airbnb and Rental Bond data
+        ↓
+Run the analysis
+        ↓
+Create the updated plots
+```
+
+The final plots are saved in the `out` folder.
+
 # Deliverable 6
 We revisited our code to assess adherence to best coding practices.
 Our major changes from Deliverable 5 to Deliverable 6 are as follows:
