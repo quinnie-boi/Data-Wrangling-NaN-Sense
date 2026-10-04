@@ -1,0 +1,18 @@
+data:
+  data_dir: "data"
+  uncleaned_airbnb_dir: "uncleaned_airbnb_listings"
+  out_dir: "out"
+
+files:
+  airbnb_file_name: "chch_airbnb_listings.csv"
+  bonds_raw_file: "uncleaned_bonds.csv"
+  bonds_file_name: "cleaned_bonds.csv"
+  merged_file_name: "merged_listings_and_bonds.csv"
+  uncleaned_airbnb_file: "uncleaned_airbnb_listings.csv"
+  airbnb_sa2_file_name: "cleaned_airbnb_with_sa2.csv"
+  sa2_2019_file: "statistical-area-2-2019-generalised.csv"
+  jodi_sa2: "cleaned/chch_airbnb_listings_with_sa2.csv"
+
+airbnb:
+  file_prefix: "listings-"
+  file_suffix: ".csv"

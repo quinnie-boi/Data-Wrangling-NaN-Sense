@@ -69,6 +69,18 @@ def clean_bonds_dataset():
         f"{oldest.date()} to {newest.date()}"
     )
 
+    # Add year-quarter column
+    rent_year = rental_bonds_data["TimeFrame"].dt.year
+    rent_month = rental_bonds_data["TimeFrame"].dt.month
+
+    rent_quarter = (rent_month - 1) // 3 + 1
+
+    rental_bonds_data["year_quarter"] = (
+            rent_year.astype(str).str[-2:]
+            + "Q"
+            + rent_quarter.astype(str)
+    )
+
     # Save cleaned dataset
     rental_bonds_data.to_csv(
         CLEANED_BONDS_FILE,
@@ -85,7 +97,7 @@ def clean_bonds_dataset():
 
 def main():
     clean_bonds_dataset()
-    print("No errors")
+    print("No errors cleaning bond dataset")
 
 
 if __name__ == "__main__":
