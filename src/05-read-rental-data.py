@@ -35,7 +35,7 @@ def clean_quarterly_dataset():
         columns={"Location Id": "sa2_code"},
         inplace=True
     )
-
+    df["sa2_code"] = df["sa2_code"].astype("Int64")
     # Keep aggregate dwelling/beds data
     df = df[
         (df["Dwelling Type"] == "ALL") &
