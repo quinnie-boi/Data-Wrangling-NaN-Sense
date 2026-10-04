@@ -63,3 +63,5 @@ airbnb.to_csv(
         CLEANED_AIRBNB_SA2_FILE,
         index=False
     )
+
+print("SA2_2019 codes assigned to airbnb listings successfully")

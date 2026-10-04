@@ -25,6 +25,8 @@ $(CLEANED_AIRBNB): $(UNCLEANED_AIRBNB) src/02-clean-airbnb.py constants.py confi
 $(AIRBNB_SA2): $(CLEANED_AIRBNB) src/03-sa2-noAPI.py constants.py config.yaml
 	PYTHONPATH=$(PYTHONPATH) $(PYTHON) src/03-sa2-noAPI.py
 
+# put airbnb graphs to png here, also summary stats?
+
 $(CLEANED_BONDS): $(RAW_BONDS) src/05-read-rental-data.py constants.py config.yaml
 	PYTHONPATH=$(PYTHONPATH) $(PYTHON) src/05-read-rental-data.py
 

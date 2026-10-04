@@ -33,12 +33,14 @@ print(
 
 print(
     "New median:",
-    med_airbnb_price(326600, CLEANED_AIRBNB_SA2_FILE)
+    med_airbnb_price(326600, CLEANED_MERGED_DATASET_FILE)
 )
+
+
 
 def compare_central():
     jodi = pd.read_csv(JODI_SA2)
-    new = pd.read_csv(CLEANED_AIRBNB_SA2_FILE)
+    new = pd.read_csv(CLEANED_MERGED_DATASET_FILE)
 
     jodi = jodi[jodi["sa2_code"] == 326600].copy()
     new = new[new["sa2_code"] == 326600].copy()
@@ -61,33 +63,58 @@ def compare_central():
     print("IDs only in new:", len(new_ids - jodi_ids))
     print("IDs in both:", len(jodi_ids & new_ids))
 
-compare_central()
 
-extra_ids = new_ids - jodi_ids
+# compare_central()
 
-extra_listings = new_central[
-    new_central["id"].isin(extra_ids)
-].copy()
+def compare_dataset_location_population(filename = CLEANED_MERGED_DATASET_FILE):
+    """
+    print how many airbnb and rental properties are in each location
+    filename: The merged airbnb and rental bonds dataset with sa2.
+    """
+    df = pd.read_csv(filename)
+    #open csv using given filename
+    # with open(df,'r') as property_data:
+    #     # create necescarry dictionaries
+    #     locate_airbnb_dict = {}
+    #     locate_rental_dict = {}
+    #     #loop through all listings and sort locations into different dict keys
+    #     for property_listing in property_data:
+    #         #split listing into list using .strip()
+    #         property_listing = property_listing.strip().split(',')
+    #         if property_listing[2] in locate_airbnb_dict:
+    #             locate_airbnb_dict[property_listing[2]] += 1
+    #         else:
+    #             locate_airbnb_dict[property_listing[2]] = 1
 
-print("\n========== EXTRA NEW LISTINGS ==========")
-print("Unique extra listings:", extra_listings["id"].nunique())
-print("Total extra observations:", len(extra_listings))
+    #         #simplify rental reigons this was added to put all (noth,west,south,east) variants into one location (remove if need be)
+    #         splited_rental =  property_listing[-1].strip().split(' ')
+    #         if splited_rental[-1] in ["North", "East", "South", "West"]:
+    #             splited_rental.pop(-1)
+    #         property_listing[-1] = " ".join(splited_rental)
+    #         #(if needed remove up to here)
 
-print(
-    extra_listings[
-        [
-            "id",
-            "price",
-            "latitude",
-            "longitude",
-            "year_quarter",
-            "sa2_code",
-            "sa2_name"
-        ]
-    ]
-    .sort_values(["id", "year_quarter"])
-    .to_string(index=False)
-)
+    #         if property_listing[-1] in locate_rental_dict:
+    #             locate_rental_dict[property_listing[-1]] += 1
+    #         else:
+    #             locate_rental_dict[property_listing[-1]] = 1
+    # # print out the location dicts:
+    # print("Rental Locations:")
+    # print(locate_rental_dict)
+    # print("Airbnb Locations:")
+    # print(locate_airbnb_dict)
+
+    summary = (
+        df.groupby("sa2_name")
+        .agg(
+            airbnb_listings=("id", "count"),
+            active_bonds=("Active Bonds", "first"),
+            total_bonds=("Total Bonds", "first")
+        )
+        .sort_values("airbnb_listings", ascending=False)
+        .head()
+    )
+
+    print(summary)
 
 
 def main():
@@ -96,7 +123,7 @@ def main():
     # print('#' * 10, 'Median Price', '#' * 10)
     # print(f"Median Airbnb price for Christchurch Central (SA2: 326600): ${median_price:.2f}\n\n")
     print("alex")
-
+    compare_dataset_location_population()
 
 if __name__ == "__main__":
     main()

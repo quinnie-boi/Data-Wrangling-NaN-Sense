@@ -46,6 +46,12 @@ def merge_rental_bonds_and_chch_listings():
             ["sa2_code", "year_quarter"]
         ).sum())
 
+    bond_quarters = set(
+        bond["year_quarter"].dropna()
+    )
+    airbnb = airbnb[
+        airbnb["year_quarter"].isin(bond_quarters)
+    ].copy()
 
     joined = airbnb.merge(
         bond,

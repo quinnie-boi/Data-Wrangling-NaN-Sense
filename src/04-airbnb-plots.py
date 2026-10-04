@@ -1,4 +1,4 @@
-from constants import CLEANED_AIRBNB_FILE, CLEANED_BONDS_FILE, UNCLEANED_AIRBNB_FILE, UNCLEANED_BONDS_FILE
+from constants import CLEANED_AIRBNB_FILE
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
