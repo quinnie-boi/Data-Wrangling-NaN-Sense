@@ -1,8 +1,9 @@
-from constants import CLEANED_AIRBNB_FILE, CLEANED_BONDS_FILE, UNCLEANED_AIRBNB_FILE, UNCLEANED_BONDS_FILE
+from constants import CLEANED_AIRBNB_FILE, CLEANED_BONDS_FILE, UNCLEANED_AIRBNB_FILE, RAW_BONDS_FILE
 import pandas as pd
-
+import matplotlib.pyplot as plt
+import numpy as np
 # month year column code to be added here
-
+import os
 
 def read_data(data_source="data/raw"):
     """
@@ -15,7 +16,6 @@ def read_data(data_source="data/raw"):
 
     data_path: the relative path to where the csv files are stored
     """
-    import os
 
     # Automatically finds all files containing "listings" in the name
     pattern = "listings"
@@ -51,24 +51,6 @@ def data_collection_date(data_file_name):
     return year, month
 
 
-# price histogram
-
-# remove missing price values??
-
-
-def plot_hist(values, title):
-    """plot the prices in a histogram"""
-    price = values["price"]
-    plt.figure(figsize=(8, 6))
-    axes = plt.axes()
-    axes.hist(
-        price, bins=np.linspace(0, 1500, 16), edgecolor="steelblue", color="skyblue"
-    )
-    axes.set_title(title)
-    axes.set_xlabel("Nightly price ($)")
-    axes.set_ylabel("Count")
-
-
 # days since last review --> chch_data daytime format is in
 def str_to_date(data):
     """convert string format of date in last-review column (YYYY-MM-DD) to date"""
@@ -96,7 +78,7 @@ def open_airbnb_dataset(path = UNCLEANED_AIRBNB_FILE):
         index_col=0 #use id as the index column
     )
 
-def open_quarterly_dataset(path = UNCLEANED_BONDS_FILE):
+def open_quarterly_dataset(path = RAW_BONDS_FILE):
     return pd.read_csv(path,
         parse_dates=["TimeFrame"]
     )
@@ -149,7 +131,17 @@ def cleaned_airbnb_dataset():
     for category in ['neighbourhood', 'room_type']:
         df[category] = df[category].astype('category')
 
+    # Convert invalid prices to NaN
+    df["price"] = pd.to_numeric(
+        df["price"],
+        errors="coerce"
+    )
 
+    # Remove listings without a usable price
+    df.dropna(
+        subset=["price"],
+        inplace=True
+    )
     return df
 
 

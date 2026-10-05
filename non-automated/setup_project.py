@@ -148,7 +148,7 @@ def warn_about_extra_items():
     unexpected_files = []
     expected_data_items = EXPECTED_ROOT_FILES
 
-    for item in os.listdir("."):
+    for item in os.listdir(".."):
         if item not in expected_data_items:
             unexpected_files.append(item)
 

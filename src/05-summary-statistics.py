@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from matplotlib.patches import Patch
-from clean_datasets_4 import cleaned_airbnb_dataset, open_airbnb_dataset
+from constants import UNCLEANED_AIRBNB_FILE, CLEANED_AIRBNB_FILE, OUT_DIR
 
 def plot_hist(values, title):
     """plot the prices in a histogram"""
@@ -52,13 +52,14 @@ def plot_day_hist(day_values):
 # plot in histogram
 def plot_rev_hist(rev_values):
     """number of reviews per property in CHCH"""
-    reviews = rev_values["number_of_reviews"]
+    reviews = rev_values["number_of_reviews"].dropna()
     plt.figure(figsize=(8, 6))
     axes = plt.axes()
 
+    max_reviews = rev_values["number_of_reviews"].max()
     bins = np.concatenate([
         np.linspace(0, 600, 30),
-        [np.inf],
+        [max_reviews + 1],
     ])
     counts, bins, patches = axes.hist(
         reviews,
@@ -96,43 +97,143 @@ def plot_rev_hist(rev_values):
     axes.set_ylabel("Count/Number of properties")
     axes.legend(handles=legend_elements, title="Review count")
 
+def save_summary_report(chch_data, data, chch_90, nz_90):
+    """Save summary statistics printed by this script to a text file."""
+
+    report_file = OUT_DIR / "summary_statistics_report.txt"
+
+    report = (
+        "AIRBNB SUMMARY STATISTICS REPORT\n"
+        "================================\n\n"
+
+        f"Christchurch last_review dtype: "
+        f"{chch_data['last_review'].dtype}\n\n"
+
+        "REVIEW STATISTICS\n"
+        "-----------------\n"
+        f"The top 10% of properties reviewed in Christchurch "
+        f"are reviewed more than {chch_90:.0f} times.\n\n"
+
+        f"The top 10% of properties reviewed nationwide "
+        f"are reviewed more than {nz_90:.0f} times.\n\n"
+
+        "DATASET INFORMATION\n"
+        "-------------------\n"
+        f"New Zealand observations: {len(data):,}\n"
+        f"Christchurch observations: {len(chch_data):,}\n"
+    )
+
+    with open(report_file, "w", encoding="utf-8") as file:
+        file.write(report)
+
+    print(f"Summary report successfully saved to {report_file}")
+
 def main():
-    output_dir = "out"
-    os.makedirs(output_dir, exist_ok=True)
-    data = open_airbnb_dataset()
-    chch_data = cleaned_airbnb_dataset()    # summary stats to go here
+    # Make sure output directory exists
+    OUT_DIR.mkdir(
+        parents=True,
+        exist_ok=True
+    )
 
-    # plot nz nightly price data
+    # Read combined New Zealand Airbnb data
+    data = pd.read_csv(
+        UNCLEANED_AIRBNB_FILE,
+        parse_dates=["last_review"]
+    )
+
+    # Read cleaned Christchurch Airbnb data
+    chch_data = pd.read_csv(
+        CLEANED_AIRBNB_FILE,
+        parse_dates=["last_review"]
+    )
+
+    # Plot NZ nightly price data
     nz_title = "Price density of AirBnBs in New Zealand"
-    plot_hist(data, nz_title)
-    plt.savefig(os.path.join(output_dir, "nz_airbnb_price.png"), bbox_inches="tight")
-    # plot chch price data
+
+    plot_hist(
+        data,
+        nz_title
+    )
+
+    plt.savefig(
+        OUT_DIR / "nz_airbnb_price.png",
+        bbox_inches="tight"
+    )
+
+    plt.close()
+
+    # Plot Christchurch price data
     chch_title = "Price density of AirBnBs in Christchurch"
-    plot_hist(chch_data, chch_title)  # using max price of $1500
-    plt.savefig(os.path.join(output_dir, "chch_airbnb_price.png"), bbox_inches="tight")
-    # check str to date conversion worked
-    print(chch_data["last_review"].dtype)
-    # calculate days since last review
-    #days_since_review(chch_data)
-    # call days since last review hist
+
+    plot_hist(
+        chch_data,
+        chch_title
+    )
+
+    plt.savefig(
+        OUT_DIR / "chch_airbnb_price.png",
+        bbox_inches="tight"
+    )
+
+    plt.close()
+
+    print(
+        "Christchurch last_review dtype:",
+        chch_data["last_review"].dtype
+    )
+
+    # Plot days since last review
     plot_day_hist(chch_data)
-    plt.savefig(os.path.join(output_dir, "chch_days_since_review.png"), bbox_inches="tight")
-    # plot hist of number of reviews for chch
+
+    plt.savefig(
+        OUT_DIR / "chch_days_since_review.png",
+        bbox_inches="tight"
+    )
+
+    plt.close()
+
+    # Plot number of reviews
     plot_rev_hist(chch_data)
-    plt.savefig(os.path.join(output_dir, "chch_number_of_reviews.png"), bbox_inches="tight")
-    chch_90 = np.quantile(chch_data["number_of_reviews"], 0.9)
-    nz_90 = np.quantile(data["number_of_reviews"], 0.9)
-    print(
-        f"The top 10% of properties reviewed in Christchurch are reviewed more than {chch_90:.0f} times"
+
+    plt.savefig(
+        OUT_DIR / "chch_number_of_reviews.png",
+        bbox_inches="tight"
     )
-    print(
-        f"The top 10% of properties reviewed nationwide are reviewed more than {nz_90:.0f} times"
+
+    plt.close()
+
+    # Calculate review percentiles
+    chch_90 = np.quantile(
+        chch_data["number_of_reviews"],
+        0.9
     )
-    # check how many properties in chch are reviewed 182 times to get difference
-    # alex/syamily to generate final visualisation
-    # alex check plots and edit axis labels
-    plt.show()  # generate plots
+
+    nz_90 = np.quantile(
+        data["number_of_reviews"],
+        0.9
+    )
+
+    print(
+        f"The top 10% of properties reviewed in Christchurch "
+        f"are reviewed more than {chch_90:.0f} times"
+    )
+
+    print(
+        f"The top 10% of properties reviewed nationwide "
+        f"are reviewed more than {nz_90:.0f} times"
+    )
+
+    # Save summary statistics to a text report
+    save_summary_report(
+        chch_data,
+        data,
+        chch_90,
+        nz_90
+    )
+
+    print(f"Plots successfully saved to {OUT_DIR}")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
+

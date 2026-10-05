@@ -1,6 +1,16 @@
+# Raw data
 data/
+
+# Generated datasets, reports and figures
 out/
-.run/
-.idea/
+
+# Python
 __pycache__/
+*.pyc
+
+# PyCharm
+.idea/
+.run/
+
+# macOS
 .DS_Store
