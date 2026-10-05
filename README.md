@@ -1,11 +1,6 @@
 # DATA201/422 Data-Wrangling
-# Deliverable 7:
-
-In Week 10, you learned about automation. Please use what you have learned to automate your data wrangling pipeline. 
-Download the latest months of the AirBnB dataset (download the dataset "listings.csv" (not listings.csv.gz) for July and August 2026 for New Zealand from the Inside AirBnB website: Get the Data | Inside Airbnb)
-Via only one function call (ideally from the commandline), you should now be able to preprocess these new months. 
-Add the new months to your previous analyses and obtain updated plots. 
-Important: This is not about doing everything again. You are expected to automate and orchestrate your code, so updating your results should be just one command!
+# Deliverable 7.....
+....
 
 
 # Deliverable 6
