@@ -3,8 +3,4 @@ pandas
 numpy
 matplotlib
 PyYAML
-json
-sys
-time
-urllib.parse
-urllib.request
+
