@@ -47,16 +47,15 @@ $(UNCLEANED_AIRBNB): src/01-merge-listings.py $(AIRBNB_RAW) constants.py config.
 # 02 - Clean Airbnb and Rental Bond datasets
 # ---------------------------------------------------------------------------
 
-$(CLEANED_AIRBNB) $(CLEANED_BONDS): src/02-clean-datasets.py $(UNCLEANED_AIRBNB) $(RAW_BONDS) constants.py config.yaml
-	PYTHONPATH=. $(PYTHON) src/02-clean-datasets.py
-
+$(CLEANED_AIRBNB) $(CLEANED_BONDS) &: src/02-clean-datasets.py $(UNCLEANED_AIRBNB) $(RAW_BONDS) constants.py config.yaml
+    PYTHONPATH=. $(PYTHON) src/02-clean-datasets.py
 
 # ---------------------------------------------------------------------------
 # 03 - Add SA2 codes to Airbnb
 # ---------------------------------------------------------------------------
 
 $(AIRBNB_SA2): src/03-add-sa2-v5b.py $(CLEANED_AIRBNB) constants.py config.yaml
-	PYTHONPATH=. $(PYTHON) src/03-add-sa2-v5b.py
+    PYTHONPATH=. $(PYTHON) src/03-add-sa2-v5b.py
 
 
 # ---------------------------------------------------------------------------
@@ -64,19 +63,19 @@ $(AIRBNB_SA2): src/03-add-sa2-v5b.py $(CLEANED_AIRBNB) constants.py config.yaml
 # ---------------------------------------------------------------------------
 
 $(MERGED_DATA): src/04-main-5.py $(AIRBNB_SA2) $(CLEANED_BONDS) constants.py config.yaml
-	PYTHONPATH=. $(PYTHON) src/04-main-5.py
+    PYTHONPATH=. $(PYTHON) src/04-main-5.py
 
 
 # ---------------------------------------------------------------------------
-# Summary statistics / figures
+# 05 - Summary statistics / figures
 # ---------------------------------------------------------------------------
 
 $(REVIEWS_PLOT): src/05-summary-statistics.py $(CLEANED_AIRBNB) constants.py config.yaml
-	PYTHONPATH=. $(PYTHON) src/05-summary-statistics.py
+    PYTHONPATH=. $(PYTHON) src/05-summary-statistics.py
 
 
 # ---------------------------------------------------------------------------
-# Clean generated files
+# Clean
 # ---------------------------------------------------------------------------
 
 clean:
