@@ -1,0 +1,23 @@
+import matplotlib.pyplot as plt
+
+#Samples dataset: Location and corresponding prices
+location = Location_Id
+prices = Median_Rent
+
+#Finds the median price and its corresponding date/index
+median_price = median(prices)
+
+#Creates a plot
+plt.figure(figsize=(8, 5))
+plt.plot(dates, prices, marker='o', linestyle='-', color='b', label='Price')
+
+#Titles and labels
+plt.title('Price Trends by Location')
+plt.xlabel('Location')
+plt.ylabel('Median Price ($)')
+plt.grid(True, linestyle='--', alpha=0.6)
+plt.legend()
+
+#Displays the graph
+plt.tight_layout()
+plt.show()
