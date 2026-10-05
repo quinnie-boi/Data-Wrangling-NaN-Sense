@@ -1,2 +1,10 @@
 # TO EDIT SO OUT MAKE CAN BE RUN OUT DF IDE
-pip install pandas numpy matplotlib PyYAML
+pandas
+numpy
+matplotlib
+PyYAML
+json
+sys
+time
+urllib.parse
+urllib.request
