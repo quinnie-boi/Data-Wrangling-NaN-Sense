@@ -97,6 +97,37 @@ def plot_rev_hist(rev_values):
     axes.set_ylabel("Count/Number of properties")
     axes.legend(handles=legend_elements, title="Review count")
 
+def save_summary_report(chch_data, data, chch_90, nz_90):
+    """Save summary statistics printed by this script to a text file."""
+
+    report_file = OUT_DIR / "summary_statistics_report.txt"
+
+    report = (
+        "AIRBNB SUMMARY STATISTICS REPORT\n"
+        "================================\n\n"
+
+        f"Christchurch last_review dtype: "
+        f"{chch_data['last_review'].dtype}\n\n"
+
+        "REVIEW STATISTICS\n"
+        "-----------------\n"
+        f"The top 10% of properties reviewed in Christchurch "
+        f"are reviewed more than {chch_90:.0f} times.\n\n"
+
+        f"The top 10% of properties reviewed nationwide "
+        f"are reviewed more than {nz_90:.0f} times.\n\n"
+
+        "DATASET INFORMATION\n"
+        "-------------------\n"
+        f"New Zealand observations: {len(data):,}\n"
+        f"Christchurch observations: {len(chch_data):,}\n"
+    )
+
+    with open(report_file, "w", encoding="utf-8") as file:
+        file.write(report)
+
+    print(f"Summary report successfully saved to {report_file}")
+
 def main():
     # Make sure output directory exists
     OUT_DIR.mkdir(
@@ -190,6 +221,14 @@ def main():
     print(
         f"The top 10% of properties reviewed nationwide "
         f"are reviewed more than {nz_90:.0f} times"
+    )
+
+    # Save summary statistics to a text report
+    save_summary_report(
+        chch_data,
+        data,
+        chch_90,
+        nz_90
     )
 
     print(f"Plots successfully saved to {OUT_DIR}")
