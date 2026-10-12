@@ -5,7 +5,7 @@ Imports the nine airbnb listing dataset csv files from a folder and
 merges them into one larger dataset which is saved to disk.
 """
 
-from constants import *
+from constants import UNCLEANED_AIRBNB_FILE, UNCLEANED_AIRBNB_DIR
 import os
 import pandas as pd
 

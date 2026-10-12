@@ -1,8 +1,6 @@
-from constants import CLEANED_AIRBNB_FILE, CLEANED_BONDS_FILE, UNCLEANED_AIRBNB_FILE, UNCLEANED_BONDS_FILE
+from constants import CLEANED_AIRBNB_FILE, CLEANED_BONDS_FILE, UNCLEANED_AIRBNB_FILE, RAW_BONDS_FILE
 import pandas as pd
-
-# month year column code to be added here
-
+import os
 
 def read_data(data_source="data/raw"):
     """
@@ -15,7 +13,6 @@ def read_data(data_source="data/raw"):
 
     data_path: the relative path to where the csv files are stored
     """
-    import os
 
     # Automatically finds all files containing "listings" in the name
     pattern = "listings"
@@ -51,24 +48,6 @@ def data_collection_date(data_file_name):
     return year, month
 
 
-# price histogram
-
-# remove missing price values??
-
-
-def plot_hist(values, title):
-    """plot the prices in a histogram"""
-    price = values["price"]
-    plt.figure(figsize=(8, 6))
-    axes = plt.axes()
-    axes.hist(
-        price, bins=np.linspace(0, 1500, 16), edgecolor="steelblue", color="skyblue"
-    )
-    axes.set_title(title)
-    axes.set_xlabel("Nightly price ($)")
-    axes.set_ylabel("Count")
-
-
 # days since last review --> chch_data daytime format is in
 def str_to_date(data):
     """convert string format of date in last-review column (YYYY-MM-DD) to date"""
@@ -78,8 +57,17 @@ def str_to_date(data):
 
 
 def days_since_review(data):
-    """how many days since the last review??"""
-    return (pd.to_datetime("2026-06-22",format="%Y-%m-%d") - data["last_review"]).dt.days
+    """Calculate days since last review using the month of each Airbnb scrape."""
+
+    scrape_date = pd.to_datetime(
+        {
+            "year": data["scrape_year"] + 2000,
+            "month": data["scrape_month"],
+            "day": 1,
+        }
+    ) + pd.offsets.MonthEnd(0)
+
+    return (scrape_date - data["last_review"]).dt.days
 
 def open_airbnb_dataset(path = UNCLEANED_AIRBNB_FILE):
     return pd.read_csv(path,
@@ -87,7 +75,7 @@ def open_airbnb_dataset(path = UNCLEANED_AIRBNB_FILE):
         index_col=0 #use id as the index column
     )
 
-def open_quarterly_dataset(path = UNCLEANED_BONDS_FILE):
+def open_quarterly_dataset(path = RAW_BONDS_FILE):
     return pd.read_csv(path,
         parse_dates=["TimeFrame"]
     )
@@ -140,7 +128,17 @@ def cleaned_airbnb_dataset():
     for category in ['neighbourhood', 'room_type']:
         df[category] = df[category].astype('category')
 
+    # Convert invalid prices to NaN
+    df["price"] = pd.to_numeric(
+        df["price"],
+        errors="coerce"
+    )
 
+    # Remove listings without a usable price
+    df.dropna(
+        subset=["price"],
+        inplace=True
+    )
     return df
 
 
@@ -151,29 +149,30 @@ def clean_both_datasets():
     rental_bonds_data = clean_quarterly_dataset()
     airbnb_data = cleaned_airbnb_dataset()
 
-    # TODO The oldest date is 2020-01-01 which is IMPOSSIBLE given
-    # the listings data only goes back to 25-10.
-    oldest = max(rental_bonds_data["TimeFrame"].min(), airbnb_data["last_review"].min())
-    newest = min(rental_bonds_data["TimeFrame"].max(), airbnb_data["last_review"].max())
-    oldest = pd.to_datetime("2025-10-01") # Manual override
+    # Use scrape year and month because they show when each dataset was collected.
+    airbnb_data = airbnb_data[
+        (airbnb_data["scrape_year"] > 25)
+        | (
+                (airbnb_data["scrape_year"] == 25)
+                & (airbnb_data["scrape_month"] >= 10)
+        )
+        ].copy()
 
-    # drop select columns from bond dataset
-    oldest = max(rental_bonds_data["TimeFrame"].min(), airbnb_data["last_review"].min())
-    newest = min(rental_bonds_data["TimeFrame"].max(), airbnb_data["last_review"].max())
+    scrape_periods = (
+        airbnb_data[["scrape_year", "scrape_month"]]
+        .drop_duplicates()
+        .sort_values(["scrape_year", "scrape_month"])
+    )
 
-    # quarterly: 2020-01-01 to 2026-04-01
-    # listings: 2013-03-03 to 2026-06-22
+    first_period = scrape_periods.iloc[0]
+    last_period = scrape_periods.iloc[-1]
 
-    airbnb_data = airbnb_data[airbnb_data["last_review"].ge(oldest)]
-    airbnb_data = airbnb_data[airbnb_data["last_review"].le(newest)]
-
-    # doesn't actually change anything atm
-    rental_bonds_data = rental_bonds_data[rental_bonds_data["TimeFrame"].ge(oldest)]
-    rental_bonds_data = rental_bonds_data[rental_bonds_data["TimeFrame"].le(newest)]
-
-    print(f"data combined from {oldest} to {newest}")
-    # print(rental_bonds_data['Number Of Beds'].value_counts())
-
+    print(
+        "Airbnb scrape period:",
+        f"{int(first_period['scrape_year']):02d}-{int(first_period['scrape_month']):02d}",
+        "to",
+        f"{int(last_period['scrape_year']):02d}-{int(last_period['scrape_month']):02d}"
+    )
     # Check that the categories are correct
     # print(quarterly_data['Number Of Beds'].cat.categories.tolist())
     # print(quarterly_data['Dwelling Type'].cat.categories.tolist())

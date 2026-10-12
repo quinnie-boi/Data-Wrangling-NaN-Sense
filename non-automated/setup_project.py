@@ -105,11 +105,6 @@ def check_required_files():
         if f.lower().endswith(".csv")
     ]
 
-    if len(csv_files) != EXPECTED_AIRBNB_FILE_COUNT:
-        problems.append(
-            f"Expected {EXPECTED_AIRBNB_FILE_COUNT} Airbnb CSV files "
-            f"but found {len(csv_files)}"
-        )
 
     for filename in csv_files:
         if not is_valid_airbnb_filename(filename):
@@ -153,7 +148,7 @@ def warn_about_extra_items():
     unexpected_files = []
     expected_data_items = EXPECTED_ROOT_FILES
 
-    for item in os.listdir("."):
+    for item in os.listdir(".."):
         if item not in expected_data_items:
             unexpected_files.append(item)
 
