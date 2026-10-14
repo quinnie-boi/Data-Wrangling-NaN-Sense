@@ -1,13 +1,17 @@
 # DATA201/422 Data-Wrangling
 DELIV 8
-to run project from terminal/out of IDE:
+IMPORTANT!!!
+to run project from terminal for MAC/LINUX USERS:
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 make
 
-
-
+for native windows users:
+python -m venv .venv
+.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+make
 
 # Deliverable 7:
 
@@ -19,6 +23,50 @@ Add the new months to your previous analyses and obtain updated plots.
 Important: This is not about doing everything again. You are expected to automate and orchestrate your code, 
 so updating your results should be just one command!
 
+### Our Work for Deliverable 7
+
+For Deliverable 7, we worked on automating our data-wrangling process. The main idea was to make it easier to add new Airbnb data and update our results without running every Python file separately.
+
+#### What we did
+
+- Added the July and August 2026 New Zealand Airbnb datasets.
+
+- Created a `Makefile` to connect the different steps in our data-wrangling pipeline. This means we can run the pipeline with one command instead of running each Python file separately.
+
+- Removed the fixed file-number check. Before, the project expected exactly nine monthly files, which would cause problems when we added new months. Now, new monthly files can be added without changing the expected number each time.
+
+- Removed the fixed June date and changed the cleaning process to use the month and year of each Airbnb dataset. This means July, August, and future monthly data can be processed without manually changing the date in the code.
+
+- Reused the SA2 information we already had and only looked up coordinates that were new. This avoids looking up the same coordinates again.
+
+- Changed the Airbnb and Rental Bond join from using only SA2 to using both SA2 and quarter. Using only SA2 was creating duplicate matches because the same area had Rental Bond records from different time periods. Using SA2 and quarter lets us match the same area and time period.
+
+- Updated the plotting code so the plots are automatically saved in the `out` folder when the pipeline runs.
+
+#### Running the pipeline
+
+We can now use Make to run the pipeline. Make checks what has changed and only runs the steps that need to be updated.
+
+To run the full pipeline again, we can use:
+
+```text
+make rebuild
+
+This runs the steps in the following order:
+
+Merge the monthly Airbnb data
+        ↓
+Clean the data
+        ↓
+Add SA2 information
+        ↓
+Join the Airbnb and Rental Bond data
+        ↓
+Run the analysis
+        ↓
+Create the updated plots
+```
+The final plots are saved in the out folder.
 
 # Deliverable 6
 We revisited our code to assess adherence to best coding practices.

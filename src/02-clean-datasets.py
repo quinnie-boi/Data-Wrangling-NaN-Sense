@@ -1,8 +1,5 @@
 from constants import CLEANED_AIRBNB_FILE, CLEANED_BONDS_FILE, UNCLEANED_AIRBNB_FILE, RAW_BONDS_FILE
 import pandas as pd
-import matplotlib.pyplot as plt
-import numpy as np
-# month year column code to be added here
 import os
 
 def read_data(data_source="data/raw"):

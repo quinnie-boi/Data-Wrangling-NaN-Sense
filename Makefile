@@ -1,6 +1,6 @@
 .PHONY: all clean
 
-PYTHON = .venv/bin/python
+PYTHON = python
 
 # ---------------------------------------------------------------------------
 # Raw input files
